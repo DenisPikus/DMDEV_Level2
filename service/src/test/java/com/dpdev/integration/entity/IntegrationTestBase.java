@@ -25,7 +25,5 @@ public abstract class IntegrationTestBase {
     @AfterEach
     void rollbackSession() {
         session.getTransaction().rollback();
-//        session.getTransaction().commit();  //todo modify lines 27-28 to session.getTransaction().rollback().
-//        session.close();
     }
 }
