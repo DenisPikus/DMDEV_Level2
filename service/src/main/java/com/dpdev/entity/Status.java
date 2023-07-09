@@ -4,7 +4,9 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public enum Status {
-    PENDING, PROCESSING, COMPLETED;
+    PENDING,
+    PROCESSING,
+    COMPLETED;
 
     public static Status findByName(String name) {
         return findByNameOpt(name).orElseThrow();

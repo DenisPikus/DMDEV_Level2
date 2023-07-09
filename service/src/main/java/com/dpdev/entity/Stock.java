@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Data
 @NoArgsConstructor
@@ -21,7 +22,10 @@ public class Stock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long productId;
+    @OneToOne
+    private Product product;
 
     private Integer quantity;
+
+    private String address;
 }
