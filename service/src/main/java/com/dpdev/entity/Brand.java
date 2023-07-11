@@ -1,24 +1,25 @@
 package com.dpdev.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.Arrays;
+import java.util.Optional;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Entity
-public class Brand {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public enum Brand {
+    SHIMANO,
+    ZIPBAITS,
+    MEGABASS,
+    GANCRAFT,
+    LUCKYCRAFT,
+    JACKALL;
 
-    private String name;
+    public static Brand findByName(String name) {
+        return findByNameOpt(name)
+                .orElseThrow();
+    }
+
+    public static Optional<Brand> findByNameOpt(String name) {
+        return Arrays.stream(values())
+                .filter(brand -> brand.name().equalsIgnoreCase(name))
+                .findFirst();
+    }
 }

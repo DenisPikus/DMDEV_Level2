@@ -4,7 +4,8 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public enum Role {
-    USER, ADMIN;
+    USER,
+    ADMIN;
 
     public static Role findByName(String name) {
         return findByNameOpt(name).orElseThrow();

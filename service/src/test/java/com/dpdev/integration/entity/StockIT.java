@@ -1,55 +1,109 @@
 package com.dpdev.integration.entity;
 
+import com.dpdev.entity.Brand;
+import com.dpdev.entity.Product;
 import com.dpdev.entity.Stock;
-import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import com.dpdev.entity.Type;
 import org.junit.jupiter.api.Test;
 
-import static com.dpdev.util.HibernateUtil.buildSessionFactory;
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@Slf4j
-public class StockIT {
-
-    private Session session = null;
+public class StockIT extends IntegrationTestBase {
 
     @Test
-    void saveStock() {
-        try (SessionFactory sessionFactory = buildSessionFactory()) {
-            session = sessionFactory.openSession();
+    void savePositionToStock() {
+        Product product = Product.builder()
+                .name("Casting Rod")
+                .brand(Brand.GANCRAFT)
+                .type(Type.ROD)
+                .description("Casting rod")
+                .price(new BigDecimal("200.00"))
+                .availability(true)
+                .build();
+        Stock expectedStock = createStock(product);
+        session.beginTransaction();
+        session.save(product);
+        session.save(expectedStock);
+        session.flush();
+        session.clear();
 
-            Stock expectedStock = Stock.builder()
-                    .productId(4L)
-                    .quantity(200)
-                    .build();
+        Long actualId = expectedStock.getId();
 
-            session.beginTransaction();
-            Long id = (Long) session.save(expectedStock);
-            session.getTransaction().commit();
-            log.info("Expected stock {} was saved in to DB with id = {}", expectedStock, id);
-
-            session.beginTransaction();
-            Stock actualStock = session.get(Stock.class, id);
-            session.getTransaction().commit();
-            expectedStock.setId(id);
-
-            assertThat(actualStock).isEqualTo(expectedStock);
-            log.info("Actual stock {} is equal to expected stock {}", actualStock, expectedStock);
-        }
+        assertThat(actualId).isNotNull();
     }
 
     @Test
-    void getStock() {
-        try (SessionFactory sessionFactory = buildSessionFactory()) {
-            session = sessionFactory.openSession();
+    void getPositionFromStock() {
+        Product product = Product.builder()
+                .name("Casting Rod")
+                .brand(Brand.GANCRAFT)
+                .type(Type.ROD)
+                .description("Casting rod")
+                .price(new BigDecimal("200.00"))
+                .availability(true)
+                .build();
+        Stock expectedStock = createStock(product);
+        session.beginTransaction();
+        session.save(product);
+        session.save(expectedStock);
+        session.flush();
+        session.clear();
 
-            session.beginTransaction();
-            Stock actualStock = session.get(Stock.class, 1L);
-            session.getTransaction().commit();
+        Stock actualStock = session.get(Stock.class, expectedStock.getId());
 
-            assertThat(actualStock.getProductId()).isEqualTo(1);
-            assertThat(actualStock.getQuantity()).isEqualTo(100);
-        }
+        assertThat(actualStock).isEqualTo(expectedStock);
+    }
+
+    @Test
+    void updatePositionInStock() {
+        Product product = Product.builder()
+                .name("Casting Rod")
+                .brand(Brand.GANCRAFT)
+                .type(Type.ROD)
+                .description("Casting rod")
+                .price(new BigDecimal("200.00"))
+                .availability(true)
+                .build();
+        Stock expectedStock = createStock(product);
+        session.beginTransaction();
+        session.save(product);
+        session.save(expectedStock);
+        session.flush();
+        session.clear();
+
+        expectedStock.setQuantity(10);
+        expectedStock.setAddress("BY, Gomel");
+        session.update(expectedStock);
+        session.flush();
+        session.clear();
+
+        Stock actualStock = session.get(Stock.class, expectedStock.getId());
+        assertThat(actualStock).isEqualTo(expectedStock);
+    }
+
+    @Test
+    void deletePositionFromStock() {
+        Product product = Product.builder()
+                .name("Casting Rod")
+                .brand(Brand.GANCRAFT)
+                .type(Type.ROD)
+                .description("Casting rod")
+                .price(new BigDecimal("200.00"))
+                .availability(true)
+                .build();
+        Stock expectedStock = createStock(product);
+        session.beginTransaction();
+        session.save(product);
+        session.save(expectedStock);
+        session.flush();
+        session.clear();
+
+        session.delete(expectedStock);
+        session.flush();
+
+        Stock actualStock = session.get(Stock.class, expectedStock.getId());
+        assertThat(actualStock).isNull();
     }
 }
