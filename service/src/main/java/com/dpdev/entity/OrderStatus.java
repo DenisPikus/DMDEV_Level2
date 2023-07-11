@@ -3,18 +3,18 @@ package com.dpdev.entity;
 import java.util.Arrays;
 import java.util.Optional;
 
-public enum Status {
+public enum OrderStatus {
     PENDING,
     PROCESSING,
     COMPLETED;
 
-    public static Status findByName(String name) {
+    public static OrderStatus findByName(String name) {
         return findByNameOpt(name).orElseThrow();
     }
 
-    public static Optional<Status> findByNameOpt(String name) {
+    public static Optional<OrderStatus> findByNameOpt(String name) {
         return Arrays.stream(values())
-                .filter(status -> status.name().equalsIgnoreCase(name))
+                .filter(orderStatus -> orderStatus.name().equalsIgnoreCase(name))
                 .findFirst();
     }
 }

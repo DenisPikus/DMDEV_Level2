@@ -25,7 +25,8 @@ CREATE TABLE product
     description  VARCHAR(255),
     price        DECIMAL(6, 2),
     availability BOOLEAN      NOT NULL,
-    photo_path   VARCHAR(128)
+    photo_path   VARCHAR(128),
+    stock_id     BIGINT       not null
 );
 
 -- Create table stock
@@ -42,10 +43,10 @@ CREATE TABLE stock
 CREATE TABLE orders
 (
     id            BIGSERIAL PRIMARY KEY,
-    user_id       BIGINT NOT NULL,
+    user_id       BIGINT    NOT NULL,
     creation_date TIMESTAMP NOT NULL,
     closing_date  TIMESTAMP,
-    status        VARCHAR(32)
+    orderStatus   VARCHAR(32)
 );
 
 -- Create orders_product table
@@ -80,7 +81,7 @@ VALUES (1, 100, 'BY, Minsk'),
        (3, 0, 'BY, Minsk');
 
 -- Fill in orders table
-INSERT INTO orders (user_id, creation_date, closing_date, status)
+INSERT INTO orders (user_id, creation_date, closing_date, orderStatus)
 VALUES (1, '2023-07-01', null, 'PROCESSING'),
        (2, '2023-06-30', '2023-06-30', 'COMPLETED');
 

@@ -4,76 +4,30 @@ import com.dpdev.entity.Brand;
 import com.dpdev.entity.Order;
 import com.dpdev.entity.OrderProduct;
 import com.dpdev.entity.Product;
-import com.dpdev.entity.Role;
-import com.dpdev.entity.Status;
 import com.dpdev.entity.Type;
 import com.dpdev.entity.User;
-import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.AssertionsForClassTypes;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.time.Instant;
-import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Slf4j
 public class OrderProductIT extends IntegrationTestBase {
-    private User user;
-    private Order order;
-    private Product product;
-    private OrderProduct expectedOrderProduct;
-
-    @BeforeEach
-    void setup() {
-        session = sessionFactory.openSession();
-
-        user = User.builder()
-                .firstname("User")
-                .lastname("User" + (new Random().nextInt()))
-                .email("user" + (new Random().nextInt()) + "@gmail.com")
-                .password("pass")
-                .phoneNumber("511112111" + (new Random().nextInt()))
-                .address("BY, Minsk, 300 Sovetskaja St")
-                .role(Role.USER)
-                .build();
-
-        order = Order.builder()
-                .user(user)
-                .creationDate(Instant.parse("2023-07-08T10:15:30.00Z"))
-                .status(Status.PROCESSING)
-                .build();
-
-        product = Product.builder()
-                .name("Calcutta Conquest DC 200")
-                .brand(Brand.SHIMANO)
-                .type(Type.REEL)
-                .description("Top baitcasting reel for finesse.")
-                .price(new BigDecimal("499.99"))
-                .availability(true)
-                .photoPath(null)
-                .build();
-
-
-        expectedOrderProduct = OrderProduct.builder()
-                .quantity(2)
-                .product(product)
-                .price(product.getPrice())
-                .build();
-        expectedOrderProduct.setOrder(order);
-    }
 
     @Test
     void saveOrderProduct() {
+        User user = createUser();
+        Order order = createOrder(user);
+        Product product = createProduct();
+        OrderProduct expectedOrderProduct = createOrderProduct(product);
+        expectedOrderProduct.setOrder(order);
         session.beginTransaction();
         session.save(user);
         session.save(product);
         session.save(order);
         session.save(expectedOrderProduct);
         session.flush();
-        log.info("Expected OrderProduct {} was saved in to DB with id = {}", expectedOrderProduct, expectedOrderProduct.getId());
         session.clear();
 
         Long actualId = expectedOrderProduct.getId();
@@ -83,30 +37,37 @@ public class OrderProductIT extends IntegrationTestBase {
 
     @Test
     void getOrderProduct() {
+        User user = createUser();
+        Order order = createOrder(user);
+        Product product = createProduct();
+        OrderProduct expectedOrderProduct = createOrderProduct(product);
+        expectedOrderProduct.setOrder(order);
         session.beginTransaction();
         session.save(user);
         session.save(product);
         session.save(order);
         session.save(expectedOrderProduct);
         session.flush();
-        log.info("Expected OrderProduct {} was saved in to DB with id = {}", expectedOrderProduct, expectedOrderProduct.getId());
         session.clear();
 
         OrderProduct actualOrderProduct = session.get(OrderProduct.class, expectedOrderProduct.getId());
 
         assertThat(actualOrderProduct).isEqualTo(expectedOrderProduct);
-        log.info("Actual OrderProduct {} is equal to expected OrderProduct {}", actualOrderProduct, expectedOrderProduct);
     }
 
     @Test
     void updateOrderProduct() {
+        User user = createUser();
+        Order order = createOrder(user);
+        Product product = createProduct();
+        OrderProduct expectedOrderProduct = createOrderProduct(product);
+        expectedOrderProduct.setOrder(order);
         session.beginTransaction();
         session.save(user);
         session.save(product);
         session.save(order);
         session.save(expectedOrderProduct);
         session.flush();
-        log.info("Expected OrderProduct {} was saved in to DB with id = {}", expectedOrderProduct, expectedOrderProduct.getId());
         session.clear();
         Product newProduct = Product.builder()
                 .name("GAN CRAFT JOINTED CLAW")
@@ -127,18 +88,21 @@ public class OrderProductIT extends IntegrationTestBase {
         OrderProduct actualOrderProduct = session.get(OrderProduct.class, expectedOrderProduct.getId());
 
         assertThat(actualOrderProduct).isEqualTo(expectedOrderProduct);
-        log.info("Actual OrderProduct {} is equal to expected OrderProduct {}", actualOrderProduct, expectedOrderProduct);
     }
 
     @Test
     void deleteOrderProduct() {
+        User user = createUser();
+        Order order = createOrder(user);
+        Product product = createProduct();
+        OrderProduct expectedOrderProduct = createOrderProduct(product);
+        expectedOrderProduct.setOrder(order);
         session.beginTransaction();
         session.save(user);
         session.save(product);
         session.save(order);
         session.save(expectedOrderProduct);
         session.flush();
-        log.info("Expected OrderProduct {} was saved in to DB with id = {}", expectedOrderProduct, expectedOrderProduct.getId());
         session.clear();
         OrderProduct savedOrderProduct = session.get(OrderProduct.class, expectedOrderProduct.getId());
         session.flush();
@@ -148,6 +112,5 @@ public class OrderProductIT extends IntegrationTestBase {
 
         OrderProduct actualOrderProduct = session.get(OrderProduct.class, expectedOrderProduct.getId());
         AssertionsForClassTypes.assertThat(actualOrderProduct).isNull();
-        log.info("Product {} was deleted from DB.", actualOrderProduct);
     }
 }

@@ -12,15 +12,6 @@ public enum Brand {
     LUCKYCRAFT,
     JACKALL;
 
-//    private String name;
-//    Brand(String name) {
-//        this.name = name;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-
     public static Brand findByName(String name) {
         return findByNameOpt(name)
                 .orElseThrow();
