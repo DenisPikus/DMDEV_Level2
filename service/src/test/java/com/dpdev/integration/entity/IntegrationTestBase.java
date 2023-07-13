@@ -5,9 +5,9 @@ import com.dpdev.entity.Order;
 import com.dpdev.entity.OrderProduct;
 import com.dpdev.entity.OrderStatus;
 import com.dpdev.entity.Product;
+import com.dpdev.entity.ProductType;
 import com.dpdev.entity.Role;
 import com.dpdev.entity.Stock;
-import com.dpdev.entity.Type;
 import com.dpdev.entity.User;
 import com.dpdev.integration.util.HibernateTestUtil;
 import org.hibernate.Session;
@@ -19,7 +19,6 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Random;
 
 public abstract class IntegrationTestBase {
 
@@ -47,13 +46,12 @@ public abstract class IntegrationTestBase {
     }
 
     static User createUser() {
-        int count = new Random().nextInt();
         return User.builder()
-                .firstname("User" + count)
-                .lastname("User" + count)
-                .email("user" + count + "@gmail.com")
+                .firstname("User")
+                .lastname("User")
+                .email("user@gmail.com")
                 .password("pass")
-                .phoneNumber("511112111" + count)
+                .phoneNumber("511112111")
                 .address("BY, Minsk, 300 Sovetskaja St")
                 .role(Role.USER)
                 .build();
@@ -63,7 +61,7 @@ public abstract class IntegrationTestBase {
         return Product.builder()
                 .name("Calcutta Conquest DC 200")
                 .brand(Brand.SHIMANO)
-                .type(Type.REEL)
+                .productType(ProductType.REEL)
                 .description("Top baitcasting reel for finesse.")
                 .price(BigDecimal.valueOf(499.99))
                 .availability(true)

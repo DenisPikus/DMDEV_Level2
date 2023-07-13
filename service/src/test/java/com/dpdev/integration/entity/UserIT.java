@@ -58,9 +58,6 @@ public class UserIT extends IntegrationTestBase {
         session.save(expectedUser);
         session.flush();
         session.clear();
-        User savedlUser = session.get(User.class, expectedUser.getId());
-        session.flush();
-        session.clear();
 
         session.delete(expectedUser);
         session.flush();

@@ -70,7 +70,7 @@ public class OrderIT extends IntegrationTestBase {
         session.flush();
         session.clear();
 
-        session.delete(expectedOrder.getId());
+        session.delete(expectedOrder);
 
         Order actualOrder = session.get(Order.class, expectedOrder.getId());
         assertThat(actualOrder).isNull();
