@@ -3,7 +3,7 @@ package com.dpdev.integration.entity;
 import com.dpdev.entity.Brand;
 import com.dpdev.entity.Product;
 import com.dpdev.entity.Stock;
-import com.dpdev.entity.Type;
+import com.dpdev.entity.ProductType;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -17,7 +17,7 @@ public class StockIT extends IntegrationTestBase {
         Product product = Product.builder()
                 .name("Casting Rod")
                 .brand(Brand.GANCRAFT)
-                .type(Type.ROD)
+                .productType(ProductType.ROD)
                 .description("Casting rod")
                 .price(new BigDecimal("200.00"))
                 .availability(true)
@@ -39,7 +39,7 @@ public class StockIT extends IntegrationTestBase {
         Product product = Product.builder()
                 .name("Casting Rod")
                 .brand(Brand.GANCRAFT)
-                .type(Type.ROD)
+                .productType(ProductType.ROD)
                 .description("Casting rod")
                 .price(new BigDecimal("200.00"))
                 .availability(true)
@@ -61,7 +61,7 @@ public class StockIT extends IntegrationTestBase {
         Product product = Product.builder()
                 .name("Casting Rod")
                 .brand(Brand.GANCRAFT)
-                .type(Type.ROD)
+                .productType(ProductType.ROD)
                 .description("Casting rod")
                 .price(new BigDecimal("200.00"))
                 .availability(true)
@@ -88,7 +88,7 @@ public class StockIT extends IntegrationTestBase {
         Product product = Product.builder()
                 .name("Casting Rod")
                 .brand(Brand.GANCRAFT)
-                .type(Type.ROD)
+                .productType(ProductType.ROD)
                 .description("Casting rod")
                 .price(new BigDecimal("200.00"))
                 .availability(true)

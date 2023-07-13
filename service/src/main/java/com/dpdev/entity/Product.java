@@ -3,12 +3,15 @@ package com.dpdev.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +21,8 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = "stock")
+@ToString(exclude = "stock")
 @Builder
 @Entity
 public class Product {
@@ -35,7 +40,7 @@ public class Product {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Type type;
+    private ProductType productType;
 
     private String description;
 
@@ -46,6 +51,6 @@ public class Product {
 
     private String photoPath;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Stock stock;
 }

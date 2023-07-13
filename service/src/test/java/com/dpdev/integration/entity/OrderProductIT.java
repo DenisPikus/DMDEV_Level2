@@ -4,7 +4,7 @@ import com.dpdev.entity.Brand;
 import com.dpdev.entity.Order;
 import com.dpdev.entity.OrderProduct;
 import com.dpdev.entity.Product;
-import com.dpdev.entity.Type;
+import com.dpdev.entity.ProductType;
 import com.dpdev.entity.User;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
@@ -72,7 +72,7 @@ public class OrderProductIT extends IntegrationTestBase {
         Product newProduct = Product.builder()
                 .name("GAN CRAFT JOINTED CLAW")
                 .brand(Brand.GANCRAFT)
-                .type(Type.BAIT)
+                .productType(ProductType.BAIT)
                 .description("Length: 70mm (2.75\n Weight: \n Floater: 4.1g")
                 .price(new BigDecimal("50.00"))
                 .availability(true)
