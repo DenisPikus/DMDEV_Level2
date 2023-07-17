@@ -1,5 +1,6 @@
 package com.dpdev.entity;
 
+import com.dpdev.entity.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

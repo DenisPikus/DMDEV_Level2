@@ -1,4 +1,4 @@
-package com.dpdev.entity;
+package com.dpdev.entity.enums;
 
 import java.util.Arrays;
 import java.util.Optional;
