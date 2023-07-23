@@ -1,34 +1,46 @@
 package com.dpdev.integration.entity;
 
-import com.dpdev.entity.enums.Brand;
 import com.dpdev.entity.Order;
 import com.dpdev.entity.OrderProduct;
 import com.dpdev.entity.Product;
-import com.dpdev.entity.enums.ProductType;
 import com.dpdev.entity.User;
-import org.assertj.core.api.AssertionsForClassTypes;
+import com.dpdev.entity.enums.Brand;
+import com.dpdev.entity.enums.ProductType;
+import com.dpdev.integration.IntegrationTestBase;
+import com.dpdev.integration.util.TestDataImporter;
+import org.hibernate.SessionFactory;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.persistence.EntityManager;
+import java.lang.reflect.Proxy;
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class OrderProductIT extends IntegrationTestBase {
 
+    @BeforeEach
+    void startSession() {
+        entityManager = (EntityManager) Proxy.newProxyInstance(SessionFactory.class.getClassLoader(), new Class[]{EntityManager.class},
+                (proxy, method, args1) -> method.invoke(getCurrentSessionFactory().getCurrentSession(), args1));
+        entityManager.getTransaction().begin();
+        TestDataImporter.importData(entityManager);
+    }
+
     @Test
     void saveOrderProduct() {
         User user = createUser();
         Order order = createOrder(user);
         Product product = createProduct();
-        OrderProduct expectedOrderProduct = createOrderProduct(product);
+        OrderProduct expectedOrderProduct = createOrderProduct(order, product);
         expectedOrderProduct.setOrder(order);
-        session.beginTransaction();
-        session.save(user);
-        session.save(product);
-        session.save(order);
-        session.save(expectedOrderProduct);
-        session.flush();
-        session.clear();
+        entityManager.persist(user);
+        entityManager.persist(product);
+        entityManager.persist(order);
+        entityManager.persist(expectedOrderProduct);
+        entityManager.flush();
+        entityManager.clear();
 
         Long actualId = expectedOrderProduct.getId();
 
@@ -40,17 +52,16 @@ public class OrderProductIT extends IntegrationTestBase {
         User user = createUser();
         Order order = createOrder(user);
         Product product = createProduct();
-        OrderProduct expectedOrderProduct = createOrderProduct(product);
+        OrderProduct expectedOrderProduct = createOrderProduct(order, product);
         expectedOrderProduct.setOrder(order);
-        session.beginTransaction();
-        session.save(user);
-        session.save(product);
-        session.save(order);
-        session.save(expectedOrderProduct);
-        session.flush();
-        session.clear();
+        entityManager.persist(user);
+        entityManager.persist(product);
+        entityManager.persist(order);
+        entityManager.persist(expectedOrderProduct);
+        entityManager.flush();
+        entityManager.clear();
 
-        OrderProduct actualOrderProduct = session.get(OrderProduct.class, expectedOrderProduct.getId());
+        OrderProduct actualOrderProduct = entityManager.find(OrderProduct.class, expectedOrderProduct.getId());
 
         assertThat(actualOrderProduct).isEqualTo(expectedOrderProduct);
     }
@@ -60,15 +71,14 @@ public class OrderProductIT extends IntegrationTestBase {
         User user = createUser();
         Order order = createOrder(user);
         Product product = createProduct();
-        OrderProduct expectedOrderProduct = createOrderProduct(product);
+        OrderProduct expectedOrderProduct = createOrderProduct(order, product);
         expectedOrderProduct.setOrder(order);
-        session.beginTransaction();
-        session.save(user);
-        session.save(product);
-        session.save(order);
-        session.save(expectedOrderProduct);
-        session.flush();
-        session.clear();
+        entityManager.persist(user);
+        entityManager.persist(product);
+        entityManager.persist(order);
+        entityManager.persist(expectedOrderProduct);
+        entityManager.flush();
+        entityManager.clear();
         Product newProduct = Product.builder()
                 .name("GAN CRAFT JOINTED CLAW")
                 .brand(Brand.GANCRAFT)
@@ -78,14 +88,14 @@ public class OrderProductIT extends IntegrationTestBase {
                 .availability(true)
                 .photoPath(null)
                 .build();
-        session.save(newProduct);
+        entityManager.persist(newProduct);
         expectedOrderProduct.setProduct(newProduct);
         expectedOrderProduct.setPrice(newProduct.getPrice());
-        session.update(expectedOrderProduct);
-        session.flush();
-        session.clear();
+        entityManager.merge(expectedOrderProduct);
+        entityManager.flush();
+        entityManager.clear();
 
-        OrderProduct actualOrderProduct = session.get(OrderProduct.class, expectedOrderProduct.getId());
+        OrderProduct actualOrderProduct = entityManager.find(OrderProduct.class, expectedOrderProduct.getId());
 
         assertThat(actualOrderProduct).isEqualTo(expectedOrderProduct);
     }
@@ -95,22 +105,21 @@ public class OrderProductIT extends IntegrationTestBase {
         User user = createUser();
         Order order = createOrder(user);
         Product product = createProduct();
-        OrderProduct expectedOrderProduct = createOrderProduct(product);
+        OrderProduct expectedOrderProduct = createOrderProduct(order, product);
         expectedOrderProduct.setOrder(order);
-        session.beginTransaction();
-        session.save(user);
-        session.save(product);
-        session.save(order);
-        session.save(expectedOrderProduct);
-        session.flush();
-        session.clear();
-        OrderProduct savedOrderProduct = session.get(OrderProduct.class, expectedOrderProduct.getId());
-        session.flush();
+        entityManager.persist(user);
+        entityManager.persist(product);
+        entityManager.persist(order);
+        entityManager.persist(expectedOrderProduct);
+        entityManager.flush();
+        entityManager.clear();
+        OrderProduct savedOrderProduct = entityManager.find(OrderProduct.class, expectedOrderProduct.getId());
+        entityManager.flush();
 
-        session.delete(savedOrderProduct);
-        session.flush();
+        entityManager.remove(savedOrderProduct);
+        entityManager.flush();
 
-        OrderProduct actualOrderProduct = session.get(OrderProduct.class, expectedOrderProduct.getId());
-        AssertionsForClassTypes.assertThat(actualOrderProduct).isNull();
+        OrderProduct actualOrderProduct = entityManager.find(OrderProduct.class, expectedOrderProduct.getId());
+        assertThat(actualOrderProduct).isNull();
     }
 }

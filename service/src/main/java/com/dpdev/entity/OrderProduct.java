@@ -24,7 +24,7 @@ import java.math.BigDecimal;
 @Builder
 @Entity
 @Table(name = "orders_product")
-public class OrderProduct {
+public class OrderProduct implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

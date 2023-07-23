@@ -1,24 +1,38 @@
 package com.dpdev.integration.entity;
 
 import com.dpdev.entity.Order;
-import com.dpdev.entity.enums.OrderStatus;
 import com.dpdev.entity.User;
+import com.dpdev.entity.enums.OrderStatus;
+import com.dpdev.integration.IntegrationTestBase;
+import com.dpdev.integration.util.TestDataImporter;
+import org.hibernate.SessionFactory;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.persistence.EntityManager;
+import java.lang.reflect.Proxy;
 import java.time.Instant;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class OrderIT extends IntegrationTestBase {
+
+    @BeforeEach
+    void startSession() {
+        entityManager = (EntityManager) Proxy.newProxyInstance(SessionFactory.class.getClassLoader(), new Class[]{EntityManager.class},
+                (proxy, method, args1) -> method.invoke(getCurrentSessionFactory().getCurrentSession(), args1));
+        entityManager.getTransaction().begin();
+        TestDataImporter.importData(entityManager);
+    }
+
     @Test
     void saveOrder() {
         User user = createUser();
         Order expectedOrder = createOrder(user);
-        session.beginTransaction();
-        session.save(user);
-        session.save(expectedOrder);
-        session.flush();
-        session.clear();
+        entityManager.persist(user);
+        entityManager.persist(expectedOrder);
+        entityManager.flush();
+        entityManager.clear();
 
         Long actualId = expectedOrder.getId();
 
@@ -29,13 +43,12 @@ public class OrderIT extends IntegrationTestBase {
     void getOrder() {
         User user = createUser();
         Order expectedOrder = createOrder(user);
-        session.beginTransaction();
-        session.save(user);
-        session.save(expectedOrder);
-        session.flush();
-        session.clear();
+        entityManager.persist(user);
+        entityManager.persist(expectedOrder);
+        entityManager.flush();
+        entityManager.clear();
 
-        Order actualOrder = session.get(Order.class, expectedOrder.getId());
+        Order actualOrder = entityManager.find(Order.class, expectedOrder.getId());
 
         assertThat(actualOrder).isEqualTo(expectedOrder);
     }
@@ -44,19 +57,18 @@ public class OrderIT extends IntegrationTestBase {
     void updateOrder() {
         User user = createUser();
         Order expectedOrder = createOrder(user);
-        session.beginTransaction();
-        session.save(user);
-        session.save(expectedOrder);
-        session.flush();
-        session.clear();
+        entityManager.persist(user);
+        entityManager.persist(expectedOrder);
+        entityManager.flush();
+        entityManager.clear();
         expectedOrder.setOrderStatus(OrderStatus.COMPLETED);
         expectedOrder.setClosingDate(Instant.parse("2023-07-10T10:15:30.00Z"));
 
-        session.update(expectedOrder);
-        session.flush();
-        session.clear();
+        entityManager.merge(expectedOrder);
+        entityManager.flush();
+        entityManager.clear();
 
-        Order actualOrder = session.get(Order.class, expectedOrder.getId());
+        Order actualOrder = entityManager.find(Order.class, expectedOrder.getId());
         assertThat(actualOrder).isEqualTo(expectedOrder);
     }
 
@@ -64,15 +76,14 @@ public class OrderIT extends IntegrationTestBase {
     void deleteOrder() {
         User user = createUser();
         Order expectedOrder = createOrder(user);
-        session.beginTransaction();
-        session.save(user);
-        session.save(expectedOrder);
-        session.flush();
-        session.clear();
+        entityManager.persist(user);
+        entityManager.persist(expectedOrder);
+        entityManager.flush();
+        entityManager.clear();
 
-        session.delete(expectedOrder);
+        entityManager.remove(expectedOrder);
 
-        Order actualOrder = session.get(Order.class, expectedOrder.getId());
+        Order actualOrder = entityManager.find(Order.class, expectedOrder.getId());
         assertThat(actualOrder).isNull();
     }
 }
