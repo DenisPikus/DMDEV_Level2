@@ -1,7 +1,7 @@
 package com.dpdev.integration.entity;
 
 import com.dpdev.entity.Order;
-import com.dpdev.entity.OrderStatus;
+import com.dpdev.entity.enums.OrderStatus;
 import com.dpdev.entity.User;
 import org.junit.jupiter.api.Test;
 

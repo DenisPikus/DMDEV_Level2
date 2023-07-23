@@ -1,5 +1,7 @@
 package com.dpdev.entity;
 
+import com.dpdev.entity.enums.Brand;
+import com.dpdev.entity.enums.ProductType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

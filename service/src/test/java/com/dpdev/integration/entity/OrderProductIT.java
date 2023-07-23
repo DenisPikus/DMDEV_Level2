@@ -1,10 +1,10 @@
 package com.dpdev.integration.entity;
 
-import com.dpdev.entity.Brand;
+import com.dpdev.entity.enums.Brand;
 import com.dpdev.entity.Order;
 import com.dpdev.entity.OrderProduct;
 import com.dpdev.entity.Product;
-import com.dpdev.entity.ProductType;
+import com.dpdev.entity.enums.ProductType;
 import com.dpdev.entity.User;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
