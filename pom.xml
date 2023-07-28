@@ -249,7 +249,7 @@
                             <configuration>
                                 <targetFolder>target/generated-sources/java</targetFolder>
                                 <packages>
-                                    <package>com.dmpev.entity</package>
+                                    <package>com.dpdev.entity</package>
                                 </packages>
                             </configuration>
                         </execution>

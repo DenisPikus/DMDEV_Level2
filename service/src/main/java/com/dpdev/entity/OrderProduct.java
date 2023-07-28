@@ -24,14 +24,14 @@ import java.math.BigDecimal;
 @Builder
 @Entity
 @Table(name = "orders_product")
-public class OrderProduct {
+public class OrderProduct implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Order order;
+    private Orders order;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
@@ -40,7 +40,7 @@ public class OrderProduct {
 
     private BigDecimal price;
 
-    public void setOrder(Order order) {
+    public void setOrders(Orders order) {
         this.order = order;
         this.order.getOrderProducts().add(this);
     }

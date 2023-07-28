@@ -21,7 +21,7 @@ import javax.persistence.OneToOne;
 @ToString(exclude = "product")
 @Builder
 @Entity
-public class Stock {
+public class Stock implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
