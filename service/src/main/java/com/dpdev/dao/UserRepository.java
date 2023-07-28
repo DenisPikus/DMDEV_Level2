@@ -14,12 +14,7 @@ import static com.dpdev.entity.QUser.user;
 public class UserRepository extends BaseRepository<Long, User> {
 
     public UserRepository(EntityManager entityManager) {
-        super(entityManager);
-    }
-
-    @Override
-    protected Class<User> getEntityClass() {
-        return User.class;
+        super(User.class, entityManager);
     }
 
     public List<Object[]> findUsersWithAvgOrdersOrderedByEmail() {

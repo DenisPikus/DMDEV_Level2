@@ -13,12 +13,7 @@ import static com.dpdev.entity.QProduct.product;
 public class ProductRepository extends BaseRepository<Long, Product> {
 
     public ProductRepository(EntityManager entityManager) {
-        super(entityManager);
-    }
-
-    @Override
-    protected Class<Product> getEntityClass() {
-        return Product.class;
+        super(Product.class, entityManager);
     }
 
     public List<Product> findProductByBrandAndTypeAndPrice(ProductFilter filter) {

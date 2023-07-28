@@ -9,12 +9,7 @@ import java.util.Map;
 public class OrderRepository extends BaseRepository<Long, Orders> {
 
     public OrderRepository(EntityManager entityManager) {
-        super(entityManager);
-    }
-
-    @Override
-    protected Class<Orders> getEntityClass() {
-        return Orders.class;
+        super(Orders.class, entityManager);
     }
 
     public Orders findByIdWithOrderedProducts(Long id) {

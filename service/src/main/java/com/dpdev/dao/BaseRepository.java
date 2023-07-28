@@ -13,11 +13,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public abstract class BaseRepository<K extends Serializable, E extends BaseEntity<K>> implements Repository<K, E> {
 
+    private final Class<E> clazz;
+    
     @Getter
     private final EntityManager entityManager;
-
-    protected abstract Class<E> getEntityClass();
-
+    
     @Override
     public E save(E entity) {
         entityManager.persist(entity);
@@ -37,13 +37,13 @@ public abstract class BaseRepository<K extends Serializable, E extends BaseEntit
 
     @Override
     public Optional<E> findById(K id) {
-        return Optional.ofNullable(entityManager.find(getEntityClass(), id));
+        return Optional.ofNullable(entityManager.find(clazz, id));
     }
 
     @Override
     public List<E> findAll() {
-        CriteriaQuery<E> criteria = entityManager.getCriteriaBuilder().createQuery(getEntityClass());
-        criteria.from(getEntityClass());
+        CriteriaQuery<E> criteria = entityManager.getCriteriaBuilder().createQuery(clazz);
+        criteria.from(clazz);
         return entityManager.createQuery(criteria)
                 .getResultList();
     }
