@@ -1,6 +1,6 @@
 package com.dpdev.util;
 
-import com.dpdev.entity.Order;
+import com.dpdev.entity.Orders;
 import com.dpdev.entity.OrderProduct;
 import com.dpdev.entity.Product;
 import com.dpdev.entity.Stock;
@@ -23,7 +23,7 @@ public class HibernateUtil {
         Configuration configuration = new Configuration();
         configuration.setPhysicalNamingStrategy(new CamelCaseToUnderscoresNamingStrategy());
         configuration.addAnnotatedClass(User.class);
-        configuration.addAnnotatedClass(Order.class);
+        configuration.addAnnotatedClass(Orders.class);
         configuration.addAnnotatedClass(Product.class);
         configuration.addAnnotatedClass(Stock.class);
         configuration.addAnnotatedClass(OrderProduct.class);

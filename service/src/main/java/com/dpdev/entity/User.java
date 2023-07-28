@@ -59,10 +59,10 @@ public class User implements BaseEntity<Long> {
 
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Order> orders = new ArrayList<>();
+    private List<Orders> orders = new ArrayList<>();
 
-    public void addOrder(Order order) {
-        orders.add(order);
-        order.setUser(this);
+    public void addOrder(Orders orders) {
+        this.orders.add(orders);
+        orders.setUser(this);
     }
 }

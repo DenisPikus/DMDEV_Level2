@@ -31,7 +31,7 @@ public class OrderProduct implements BaseEntity<Long> {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Order order;
+    private Orders order;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
@@ -40,7 +40,7 @@ public class OrderProduct implements BaseEntity<Long> {
 
     private BigDecimal price;
 
-    public void setOrder(Order order) {
+    public void setOrders(Orders order) {
         this.order = order;
         this.order.getOrderProducts().add(this);
     }

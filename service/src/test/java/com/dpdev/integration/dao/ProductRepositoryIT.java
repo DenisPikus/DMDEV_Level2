@@ -6,13 +6,8 @@ import com.dpdev.entity.Product;
 import com.dpdev.entity.enums.Brand;
 import com.dpdev.entity.enums.ProductType;
 import com.dpdev.integration.IntegrationTestBase;
-import com.dpdev.integration.util.TestDataImporter;
-import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.persistence.EntityManager;
-import java.lang.reflect.Proxy;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -20,23 +15,14 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ProductRepositoryIT extends IntegrationTestBase {
-    private ProductRepository productRepository;
-    private Product actualProduct;
-
-    @BeforeEach
-    void startSession() {
-        entityManager = (EntityManager) Proxy.newProxyInstance(SessionFactory.class.getClassLoader(), new Class[]{EntityManager.class},
-                (proxy, method, args1) -> method.invoke(getCurrentSessionFactory().getCurrentSession(), args1));
-        entityManager.getTransaction().begin();
-        productRepository = new ProductRepository(entityManager);
-        TestDataImporter.importData(entityManager);
-    }
+    private ProductRepository productRepository  = new ProductRepository(entityManager);
 
     @Test
     void saveProduct() {
         Product product = createProduct();
 
         productRepository.save(product);
+        entityManager.clear();
 
         assertThat(product.getId()).isNotNull();
     }
@@ -49,8 +35,10 @@ class ProductRepositoryIT extends IntegrationTestBase {
         product.setAvailability(false);
 
         productRepository.update(product);
+        entityManager.flush();
+        entityManager.clear();
 
-        actualProduct = productRepository.findById(product.getId()).get();
+        Product actualProduct = productRepository.findById(product.getId()).get();
         assertThat(actualProduct).isEqualTo(product);
     }
 
@@ -58,8 +46,9 @@ class ProductRepositoryIT extends IntegrationTestBase {
     void delete() {
         Product product = createProduct();
         productRepository.save(product);
+        entityManager.clear();
 
-        productRepository.delete(product.getId());
+        productRepository.delete(product);
 
         assertThat(productRepository.findById(product.getId())).isNotPresent();
     }
@@ -68,6 +57,7 @@ class ProductRepositoryIT extends IntegrationTestBase {
     void findById() {
         Product expectedProduct = createProduct();
         productRepository.save(expectedProduct);
+        entityManager.clear();
 
         Optional<Product> maybeActualProduct = productRepository.findById(expectedProduct.getId());
 

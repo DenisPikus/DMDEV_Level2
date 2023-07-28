@@ -3,14 +3,9 @@ package com.dpdev.integration.dao;
 import com.dpdev.dao.UserRepository;
 import com.dpdev.entity.User;
 import com.dpdev.integration.IntegrationTestBase;
-import com.dpdev.integration.util.TestDataImporter;
 import com.querydsl.core.Tuple;
-import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.persistence.EntityManager;
-import java.lang.reflect.Proxy;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,22 +13,14 @@ import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UserRepositoryIT extends IntegrationTestBase {
-    private UserRepository userRepository;
-
-    @BeforeEach
-    void startSession() {
-        entityManager = (EntityManager) Proxy.newProxyInstance(SessionFactory.class.getClassLoader(), new Class[]{EntityManager.class},
-                (proxy, method, args1) -> method.invoke(getCurrentSessionFactory().getCurrentSession(), args1));
-        entityManager.getTransaction().begin();
-        userRepository = new UserRepository(entityManager);
-        TestDataImporter.importData(entityManager);
-    }
+    private UserRepository userRepository = new UserRepository(entityManager);
 
     @Test
     void saveUser() {
         User expectedUser = createUser();
 
         User actualUser = userRepository.save(expectedUser);
+        entityManager.clear();
 
         assertThat(actualUser.getId()).isNotNull();
         assertThat(actualUser).isEqualTo(expectedUser);
@@ -44,8 +31,9 @@ class UserRepositoryIT extends IntegrationTestBase {
         User expectedUser = createUser();
         User actualUser = userRepository.save(expectedUser);
         Long actualUserId = actualUser.getId();
+        entityManager.clear();
 
-        userRepository.delete(actualUserId);
+        userRepository.delete(actualUser);
 
         assertThat(userRepository.findById(actualUserId)).isNotPresent();
     }
@@ -58,6 +46,8 @@ class UserRepositoryIT extends IntegrationTestBase {
         expectedUser.setLastname("Pavlov");
 
         userRepository.update(expectedUser);
+        entityManager.flush();
+        entityManager.clear();
 
         Optional<User> actualUser = userRepository.findById(expectedUser.getId());
         assertThat(actualUser).isPresent();
@@ -75,6 +65,7 @@ class UserRepositoryIT extends IntegrationTestBase {
     void findById() {
         User user = createUser();
         userRepository.save(user);
+        entityManager.clear();
 
         Optional<User> maybeUser = userRepository.findById(user.getId());
 

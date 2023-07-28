@@ -4,14 +4,12 @@ import com.dpdev.dao.ProductRepository;
 import com.dpdev.dao.StockRepository;
 import com.dpdev.entity.Product;
 import com.dpdev.entity.Stock;
+import com.dpdev.entity.enums.Brand;
+import com.dpdev.entity.enums.ProductType;
 import com.dpdev.integration.IntegrationTestBase;
-import com.dpdev.integration.util.TestDataImporter;
-import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.persistence.EntityManager;
-import java.lang.reflect.Proxy;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,68 +17,69 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class StockRepositoryIT extends IntegrationTestBase {
 
-    private ProductRepository productRepository;
-    private StockRepository stockRepository;
-
-    @BeforeEach
-    void startSession() {
-        entityManager = (EntityManager) Proxy.newProxyInstance(SessionFactory.class.getClassLoader(), new Class[]{EntityManager.class},
-                (proxy, method, args1) -> method.invoke(getCurrentSessionFactory().getCurrentSession(), args1));
-        entityManager.getTransaction().begin();
-        productRepository = new ProductRepository(entityManager);
-        stockRepository = new StockRepository(entityManager);
-        TestDataImporter.importData(entityManager);
-    }
+    private ProductRepository productRepository = new ProductRepository(entityManager);
+    private StockRepository stockRepository = new StockRepository(entityManager);
 
     @Test
     void saveStock() {
-        Stock stock = createStock(null);
-
-        stockRepository.save(stock);
-
-        assertThat(stock.getId()).isNotNull();
-    }
-
-    @Test
-    void saveStockWithProduct() {
         Product product = createProduct();
         productRepository.save(product);
         Stock stock = createStock(product);
 
         stockRepository.save(stock);
+        entityManager.clear();
 
         assertThat(product.getId()).isNotNull();
         assertThat(stock.getId()).isNotNull();
+        assertThat(product.getStock()).isEqualTo(stock);
     }
 
     @Test
     void updateStock() {
         Product product = createProduct();
+        Product product1 = Product.builder()
+                .name("Test")
+                .brand(Brand.SHIMANO)
+                .productType(ProductType.BAIT)
+                .description("Test description")
+                .price(new BigDecimal("1.00"))
+                .availability(false)
+                .photoPath("test")
+                .build();
         productRepository.save(product);
-        Stock stock = createStock(null);
+        productRepository.save(product1);
+        Stock stock = createStock(product);
         stockRepository.save(stock);
-
-        stock.setProduct(product);
+        entityManager.clear();
+        stock.setProduct(product1);
 
         stockRepository.update(stock);
+        entityManager.flush();
+        entityManager.clear();
 
-        assertThat(stock.getProduct()).isEqualTo(product);
+        assertThat(stock.getProduct()).isEqualTo(product1);
     }
 
     @Test
     void delete() {
-        Stock stock = createStock(null);
+        Product product = createProduct();
+        productRepository.save(product);
+        Stock stock = createStock(product);
         stockRepository.save(stock);
+        entityManager.clear();
 
-        stockRepository.delete(stock.getId());
+        stockRepository.delete(stock);
 
         assertThat(stockRepository.findById(stock.getId())).isNotPresent();
     }
 
     @Test
     void findById() {
-        Stock expectedStock = createStock(null);
+        Product product = createProduct();
+        productRepository.save(product);
+        Stock expectedStock = createStock(product);
         stockRepository.save(expectedStock);
+        entityManager.clear();
 
         Optional<Stock> maybeActualStock = stockRepository.findById(expectedStock.getId());
 

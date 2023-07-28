@@ -7,8 +7,8 @@ import com.querydsl.jpa.impl.JPAQuery;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.dpdev.entity.QOrder.order;
 import static com.dpdev.entity.QOrderProduct.orderProduct;
+import static com.dpdev.entity.QOrders.orders;
 import static com.dpdev.entity.QUser.user;
 
 public class UserRepository extends BaseRepository<Long, User> {
@@ -35,8 +35,8 @@ public class UserRepository extends BaseRepository<Long, User> {
         return new JPAQuery<Tuple>(getEntityManager())
                 .select(user.email, orderProduct.quantity.multiply(orderProduct.price).avg())
                 .from(user)
-                .join(user.orders, order)
-                .join(order.orderProducts, orderProduct)
+                .join(user.orders, orders)
+                .join(orders.orderProducts, orderProduct)
                 .groupBy(user.email)
                 .orderBy(user.email.asc())
                 .fetch();

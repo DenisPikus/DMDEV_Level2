@@ -22,7 +22,6 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +45,7 @@ import java.util.List;
 @EqualsAndHashCode(exclude = "orderProducts")
 @Builder
 @Entity
-@Table(name = "orders")
-public class Order implements BaseEntity<Long> {
+public class Orders implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,4 +65,6 @@ public class Order implements BaseEntity<Long> {
     @Builder.Default
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderProduct> orderProducts = new ArrayList<>();
+
+
 }

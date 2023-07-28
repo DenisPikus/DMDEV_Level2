@@ -4,40 +4,24 @@ import com.dpdev.dao.OrderProductRepository;
 import com.dpdev.dao.OrderRepository;
 import com.dpdev.dao.ProductRepository;
 import com.dpdev.dao.UserRepository;
-import com.dpdev.entity.Order;
+import com.dpdev.entity.Orders;
 import com.dpdev.entity.OrderProduct;
 import com.dpdev.entity.Product;
 import com.dpdev.entity.User;
 import com.dpdev.integration.IntegrationTestBase;
-import com.dpdev.integration.util.TestDataImporter;
-import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.persistence.EntityManager;
-import java.lang.reflect.Proxy;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class OrderProductRepositoryIT extends IntegrationTestBase {
+public class OrdersProductRepositoryIT extends IntegrationTestBase {
 
-    private UserRepository userRepository;
-    private OrderRepository orderRepository;
-    private ProductRepository productRepository;
-    private OrderProductRepository orderProductRepository;
-
-    @BeforeEach
-    void startSession() {
-        entityManager = (EntityManager) Proxy.newProxyInstance(SessionFactory.class.getClassLoader(), new Class[]{EntityManager.class},
-                (proxy, method, args1) -> method.invoke(getCurrentSessionFactory().getCurrentSession(), args1));
-        entityManager.getTransaction().begin();
-        userRepository = new UserRepository(entityManager);
-        orderRepository = new OrderRepository(entityManager);
-        productRepository = new ProductRepository(entityManager);
-        orderProductRepository = new OrderProductRepository(entityManager);        TestDataImporter.importData(entityManager);
-    }
+    private UserRepository userRepository = new UserRepository(entityManager);
+    private OrderRepository orderRepository = new OrderRepository(entityManager);
+    private ProductRepository productRepository = new ProductRepository(entityManager);
+    private OrderProductRepository orderProductRepository = new OrderProductRepository(entityManager);
 
     @Test
     void save() {
@@ -45,11 +29,12 @@ public class OrderProductRepositoryIT extends IntegrationTestBase {
         userRepository.save(user);
         Product product = createProduct();
         productRepository.save(product);
-        Order order = createOrder(user);
-        orderRepository.save(order);
-        OrderProduct expectedOrderProduct = createOrderProduct(order, product);
+        Orders orders = createOrder(user);
+        orderRepository.save(orders);
+        OrderProduct expectedOrderProduct = createOrderProduct(orders, product);
 
         orderProductRepository.save(expectedOrderProduct);
+        entityManager.clear();
 
         assertThat(expectedOrderProduct.getId()).isNotNull();
     }
@@ -60,13 +45,15 @@ public class OrderProductRepositoryIT extends IntegrationTestBase {
         userRepository.save(user);
         Product product = createProduct();
         productRepository.save(product);
-        Order order = createOrder(user);
-        orderRepository.save(order);
-        OrderProduct expectedOrderProduct = createOrderProduct(order, product);
+        Orders orders = createOrder(user);
+        orderRepository.save(orders);
+        OrderProduct expectedOrderProduct = createOrderProduct(orders, product);
         orderProductRepository.save(expectedOrderProduct);
         expectedOrderProduct.setQuantity(1);
 
         orderProductRepository.update(expectedOrderProduct);
+        entityManager.flush();
+        entityManager.clear();
 
         assertThat(expectedOrderProduct.getQuantity()).isEqualTo(1);
     }
@@ -77,12 +64,13 @@ public class OrderProductRepositoryIT extends IntegrationTestBase {
         userRepository.save(user);
         Product product = createProduct();
         productRepository.save(product);
-        Order order = createOrder(user);
-        orderRepository.save(order);
-        OrderProduct expectedOrderProduct = createOrderProduct(order, product);
+        Orders orders = createOrder(user);
+        orderRepository.save(orders);
+        OrderProduct expectedOrderProduct = createOrderProduct(orders, product);
         orderProductRepository.save(expectedOrderProduct);
+        entityManager.clear();
 
-        orderProductRepository.delete(expectedOrderProduct.getId());
+        orderProductRepository.delete(expectedOrderProduct);
 
         assertThat(orderProductRepository.findById(expectedOrderProduct.getId())).isNotPresent();
     }
@@ -93,10 +81,11 @@ public class OrderProductRepositoryIT extends IntegrationTestBase {
         userRepository.save(user);
         Product product = createProduct();
         productRepository.save(product);
-        Order order = createOrder(user);
-        orderRepository.save(order);
-        OrderProduct expectedOrderProduct = createOrderProduct(order, product);
+        Orders orders = createOrder(user);
+        orderRepository.save(orders);
+        OrderProduct expectedOrderProduct = createOrderProduct(orders, product);
         orderProductRepository.save(expectedOrderProduct);
+        entityManager.clear();
 
         Optional<OrderProduct>maybeOrderProduct = orderProductRepository.findById(expectedOrderProduct.getId());
 

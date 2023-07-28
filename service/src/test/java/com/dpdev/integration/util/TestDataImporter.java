@@ -1,6 +1,6 @@
 package com.dpdev.integration.util;
 
-import com.dpdev.entity.Order;
+import com.dpdev.entity.Orders;
 import com.dpdev.entity.OrderProduct;
 import com.dpdev.entity.Product;
 import com.dpdev.entity.Stock;
@@ -92,22 +92,22 @@ public class TestDataImporter {
         saveStock(entityManager, rod, 5);
         saveStock(entityManager, rod1, 2);
 
-        Order order = saveOrder(entityManager, billGates, Instant.now(), null, OrderStatus.PROCESSING);
-        Order order1 = saveOrder(entityManager, steveJobs, Instant.now(), null, OrderStatus.PROCESSING);
-        Order order2 = saveOrder(entityManager, sergeyBrin, Instant.parse("2023-07-08T10:15:30.00Z"), Instant.now(), OrderStatus.COMPLETED);
+        Orders orders = saveOrder(entityManager, billGates, Instant.now(), null, OrderStatus.PROCESSING);
+        Orders orders1 = saveOrder(entityManager, steveJobs, Instant.now(), null, OrderStatus.PROCESSING);
+        Orders orders2 = saveOrder(entityManager, sergeyBrin, Instant.parse("2023-07-08T10:15:30.00Z"), Instant.now(), OrderStatus.COMPLETED);
 
-        saveOrderProduct(entityManager, order, spoon, 2); //10
-        saveOrderProduct(entityManager, order, jerkBait, 5);  //20
-        saveOrderProduct(entityManager, order, jerkBait1, 8); //25
-        saveOrderProduct(entityManager, order, reel1, 1); //250
+        saveOrderProduct(entityManager, orders, spoon, 2); //10
+        saveOrderProduct(entityManager, orders, jerkBait, 5);  //20
+        saveOrderProduct(entityManager, orders, jerkBait1, 8); //25
+        saveOrderProduct(entityManager, orders, reel1, 1); //250
 
-        saveOrderProduct(entityManager, order1, jerkBait3, 2);   //25
-        saveOrderProduct(entityManager, order1, rod, 1);  //500
-        saveOrderProduct(entityManager, order1, reel2, 1);    //350
+        saveOrderProduct(entityManager, orders1, jerkBait3, 2);   //25
+        saveOrderProduct(entityManager, orders1, rod, 1);  //500
+        saveOrderProduct(entityManager, orders1, reel2, 1);    //350
 
-        saveOrderProduct(entityManager, order2, jerkBait2, 2);    //15
-        saveOrderProduct(entityManager, order2, jerkBait1, 3);    //25
-        saveOrderProduct(entityManager, order2, reel, 1); //495
+        saveOrderProduct(entityManager, orders2, jerkBait2, 2);    //15
+        saveOrderProduct(entityManager, orders2, jerkBait1, 3);    //25
+        saveOrderProduct(entityManager, orders2, reel, 1); //495
     }
 
     private User saveUser(EntityManager entityManager,
@@ -164,24 +164,24 @@ public class TestDataImporter {
         entityManager.persist(stock);
     }
 
-    private Order saveOrder(EntityManager entityManager,
-                            User user,
-                            Instant creationDate,
-                            Instant closingDate,
-                            OrderStatus orderStatus) {
-        Order order = Order.builder()
+    private Orders saveOrder(EntityManager entityManager,
+                             User user,
+                             Instant creationDate,
+                             Instant closingDate,
+                             OrderStatus orderStatus) {
+        Orders orders = Orders.builder()
                 .user(user)
                 .creationDate(creationDate)
                 .closingDate(closingDate)
                 .orderStatus(orderStatus)
                 .build();
-        entityManager.persist(order);
+        entityManager.persist(orders);
 
-        return order;
+        return orders;
     }
 
     private void saveOrderProduct(EntityManager entityManager,
-                                  Order order,
+                                  Orders order,
                                   Product product,
                                   Integer quantity) {
         OrderProduct orderProduct = OrderProduct.builder()
