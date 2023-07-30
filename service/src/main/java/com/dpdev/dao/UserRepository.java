@@ -3,6 +3,7 @@ package com.dpdev.dao;
 import com.dpdev.entity.User;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQuery;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -11,6 +12,7 @@ import static com.dpdev.entity.QOrderProduct.orderProduct;
 import static com.dpdev.entity.QOrders.orders;
 import static com.dpdev.entity.QUser.user;
 
+@Repository
 public class UserRepository extends BaseRepository<Long, User> {
 
     public UserRepository(EntityManager entityManager) {

@@ -9,34 +9,35 @@ import com.dpdev.entity.enums.Brand;
 import com.dpdev.entity.enums.OrderStatus;
 import com.dpdev.entity.enums.ProductType;
 import com.dpdev.entity.enums.Role;
-import com.dpdev.integration.util.HibernateTestUtil;
+import com.dpdev.integration.config.ApplicationTestConfiguration;
 import com.dpdev.integration.util.TestDataImporter;
-import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
-import java.lang.reflect.Proxy;
 import java.math.BigDecimal;
 import java.time.Instant;
 
+@Component
 public class IntegrationTestBase {
 
-    private static SessionFactory sessionFactory;
+    protected static AnnotationConfigApplicationContext context;
+
     protected static EntityManager entityManager;
 
     @BeforeAll
     static void openResources() {
-        sessionFactory = HibernateTestUtil.buildSessionFactory();
-        entityManager = (EntityManager) Proxy.newProxyInstance(SessionFactory.class.getClassLoader(), new Class[]{EntityManager.class},
-                (proxy, method, args1) -> method.invoke(sessionFactory.getCurrentSession(), args1));
+        context = new AnnotationConfigApplicationContext(ApplicationTestConfiguration.class);
+        entityManager = context.getBean(EntityManager.class);
     }
 
     @AfterAll
     static void closeResources() {
-        sessionFactory.close();
+        context.close();
     }
 
     @BeforeEach

@@ -13,7 +13,8 @@ import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UserRepositoryIT extends IntegrationTestBase {
-    private UserRepository userRepository = new UserRepository(entityManager);
+
+    private UserRepository userRepository = context.getBean(UserRepository.class);
 
     @Test
     void saveUser() {

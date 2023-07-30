@@ -14,6 +14,7 @@ public class HibernateTestUtil {
     static {
         postgres.start();
     }
+
     public static SessionFactory buildSessionFactory() {
         Configuration configuration = HibernateUtil.buildConfiguration();
         configuration.setProperty("hibernate.connection.url", postgres.getJdbcUrl());

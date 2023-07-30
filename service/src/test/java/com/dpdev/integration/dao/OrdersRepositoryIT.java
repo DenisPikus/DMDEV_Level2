@@ -20,10 +20,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class OrdersRepositoryIT extends IntegrationTestBase {
 
-    private UserRepository userRepository = new UserRepository(entityManager);
-    private OrderRepository orderRepository = new OrderRepository(entityManager);
-    private ProductRepository productRepository = new ProductRepository(entityManager);
-    private OrderProductRepository orderProductRepository = new OrderProductRepository(entityManager);
+    private UserRepository userRepository = context.getBean(UserRepository.class);
+    private OrderRepository orderRepository = context.getBean(OrderRepository.class);
+    private ProductRepository productRepository = context.getBean(ProductRepository.class);
+    private OrderProductRepository orderProductRepository = context.getBean(OrderProductRepository.class);
 
     @Test
     void saveOrder() {

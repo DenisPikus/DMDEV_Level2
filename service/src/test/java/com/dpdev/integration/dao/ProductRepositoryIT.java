@@ -15,7 +15,8 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ProductRepositoryIT extends IntegrationTestBase {
-    private ProductRepository productRepository  = new ProductRepository(entityManager);
+
+    private ProductRepository productRepository = context.getBean(ProductRepository.class);
 
     @Test
     void saveProduct() {
