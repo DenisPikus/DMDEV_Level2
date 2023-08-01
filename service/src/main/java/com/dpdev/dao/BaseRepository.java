@@ -14,10 +14,10 @@ import java.util.Optional;
 public abstract class BaseRepository<K extends Serializable, E extends BaseEntity<K>> implements Repository<K, E> {
 
     private final Class<E> clazz;
-    
+
     @Getter
     private final EntityManager entityManager;
-    
+
     @Override
     public E save(E entity) {
         entityManager.persist(entity);

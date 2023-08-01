@@ -4,8 +4,8 @@ import com.dpdev.dao.OrderProductRepository;
 import com.dpdev.dao.OrderRepository;
 import com.dpdev.dao.ProductRepository;
 import com.dpdev.dao.UserRepository;
-import com.dpdev.entity.Orders;
 import com.dpdev.entity.OrderProduct;
+import com.dpdev.entity.Orders;
 import com.dpdev.entity.Product;
 import com.dpdev.entity.User;
 import com.dpdev.integration.IntegrationTestBase;
@@ -18,10 +18,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class OrdersProductRepositoryIT extends IntegrationTestBase {
 
-    private UserRepository userRepository = new UserRepository(entityManager);
-    private OrderRepository orderRepository = new OrderRepository(entityManager);
-    private ProductRepository productRepository = new ProductRepository(entityManager);
-    private OrderProductRepository orderProductRepository = new OrderProductRepository(entityManager);
+    private UserRepository userRepository = context.getBean(UserRepository.class);
+    private OrderRepository orderRepository = context.getBean(OrderRepository.class);
+    private ProductRepository productRepository = context.getBean(ProductRepository.class);
+    private OrderProductRepository orderProductRepository = context.getBean(OrderProductRepository.class);
 
     @Test
     void save() {
@@ -87,7 +87,7 @@ public class OrdersProductRepositoryIT extends IntegrationTestBase {
         orderProductRepository.save(expectedOrderProduct);
         entityManager.clear();
 
-        Optional<OrderProduct>maybeOrderProduct = orderProductRepository.findById(expectedOrderProduct.getId());
+        Optional<OrderProduct> maybeOrderProduct = orderProductRepository.findById(expectedOrderProduct.getId());
 
         assertThat(maybeOrderProduct).isPresent();
         assertThat(maybeOrderProduct.get()).isEqualTo(expectedOrderProduct);

@@ -2,10 +2,12 @@ package com.dpdev.dao;
 
 import com.dpdev.entity.Orders;
 import org.hibernate.graph.GraphSemantic;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.Map;
 
+@Repository
 public class OrderRepository extends BaseRepository<Long, Orders> {
 
     public OrderRepository(EntityManager entityManager) {
