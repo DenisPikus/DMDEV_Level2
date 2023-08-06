@@ -6,6 +6,7 @@ import com.dpdev.entity.Product;
 import com.dpdev.entity.enums.Brand;
 import com.dpdev.entity.enums.ProductType;
 import com.dpdev.integration.IntegrationTestBase;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -14,9 +15,10 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RequiredArgsConstructor
 class ProductRepositoryIT extends IntegrationTestBase {
 
-    private ProductRepository productRepository = context.getBean(ProductRepository.class);
+    private final ProductRepository productRepository;
 
     @Test
     void saveProduct() {

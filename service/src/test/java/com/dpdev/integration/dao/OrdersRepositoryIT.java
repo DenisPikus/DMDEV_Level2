@@ -10,6 +10,7 @@ import com.dpdev.entity.Product;
 import com.dpdev.entity.User;
 import com.dpdev.entity.enums.OrderStatus;
 import com.dpdev.integration.IntegrationTestBase;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -18,12 +19,13 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RequiredArgsConstructor
 class OrdersRepositoryIT extends IntegrationTestBase {
 
-    private UserRepository userRepository = context.getBean(UserRepository.class);
-    private OrderRepository orderRepository = context.getBean(OrderRepository.class);
-    private ProductRepository productRepository = context.getBean(ProductRepository.class);
-    private OrderProductRepository orderProductRepository = context.getBean(OrderProductRepository.class);
+    private final UserRepository userRepository;
+    private final OrderRepository orderRepository;
+    private final ProductRepository productRepository;
+    private final OrderProductRepository orderProductRepository;
 
     @Test
     void saveOrder() {

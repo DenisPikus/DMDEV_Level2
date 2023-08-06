@@ -7,6 +7,7 @@ import com.dpdev.entity.Stock;
 import com.dpdev.entity.enums.Brand;
 import com.dpdev.entity.enums.ProductType;
 import com.dpdev.integration.IntegrationTestBase;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -15,10 +16,11 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RequiredArgsConstructor
 public class StockRepositoryIT extends IntegrationTestBase {
 
-    private ProductRepository productRepository = context.getBean(ProductRepository.class);
-    private StockRepository stockRepository = context.getBean(StockRepository.class);
+    private final ProductRepository productRepository;
+    private final StockRepository stockRepository;
 
     @Test
     void saveStock() {
