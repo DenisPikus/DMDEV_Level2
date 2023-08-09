@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=store
+    username: postgres
+    password: admin
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate.format_sql: true
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+
+logging:
+  pattern:
+      console: "%d %-5level %logger : %msg%n"
+      file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    root: INFO
+  file:
+    path: /
+    name: dpdev.log

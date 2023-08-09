@@ -4,6 +4,7 @@ import com.dpdev.dao.UserRepository;
 import com.dpdev.entity.User;
 import com.dpdev.integration.IntegrationTestBase;
 import com.querydsl.core.Tuple;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -12,9 +13,10 @@ import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RequiredArgsConstructor
 class UserRepositoryIT extends IntegrationTestBase {
 
-    private UserRepository userRepository = context.getBean(UserRepository.class);
+    private final UserRepository userRepository;
 
     @Test
     void saveUser() {

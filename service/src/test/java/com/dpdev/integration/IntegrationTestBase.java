@@ -9,46 +9,37 @@ import com.dpdev.entity.enums.Brand;
 import com.dpdev.entity.enums.OrderStatus;
 import com.dpdev.entity.enums.ProductType;
 import com.dpdev.entity.enums.Role;
-import com.dpdev.integration.config.ApplicationTestConfiguration;
 import com.dpdev.integration.util.TestDataImporter;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-@Component
-public class IntegrationTestBase {
+import static com.dpdev.integration.util.ContainerTestUtil.postgres;
 
-    protected static AnnotationConfigApplicationContext context;
+@SpringBootTest()
+@Transactional
+public abstract class IntegrationTestBase {
 
-    protected static EntityManager entityManager;
+    @Autowired
+    protected EntityManager entityManager;
 
-    @BeforeAll
-    static void openResources() {
-        context = new AnnotationConfigApplicationContext(ApplicationTestConfiguration.class);
-        entityManager = context.getBean(EntityManager.class);
-    }
-
-    @AfterAll
-    static void closeResources() {
-        context.close();
+    @DynamicPropertySource
+    static void setProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgres::getJdbcUrl);
+        registry.add("spring.datasource.username", postgres::getUsername);
+        registry.add("spring.datasource.password", postgres::getPassword);
     }
 
     @BeforeEach
     void startSession() {
-        entityManager.getTransaction().begin();
         TestDataImporter.importData(entityManager);
-    }
-
-    @AfterEach
-    void rollback() {
-        entityManager.getTransaction().rollback();
     }
 
     public static User createUser() {

@@ -3,6 +3,7 @@ package com.dpdev.dao;
 import com.dpdev.entity.BaseEntity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
@@ -10,6 +11,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public abstract class BaseRepository<K extends Serializable, E extends BaseEntity<K>> implements Repository<K, E> {
 
