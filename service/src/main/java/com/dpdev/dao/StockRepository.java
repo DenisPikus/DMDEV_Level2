@@ -1,14 +1,7 @@
 package com.dpdev.dao;
 
 import com.dpdev.entity.Stock;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import javax.persistence.EntityManager;
-
-@Repository
-public class StockRepository extends BaseRepository<Long, Stock> {
-
-    public StockRepository(EntityManager entityManager) {
-        super(Stock.class, entityManager);
-    }
+public interface StockRepository extends JpaRepository<Stock, Long> {
 }

@@ -1,18 +1,18 @@
 package com.dpdev.integration.dao;
 
 import com.dpdev.dao.ProductRepository;
+import com.dpdev.dao.QPredicate;
 import com.dpdev.dto.ProductFilter;
 import com.dpdev.entity.Product;
 import com.dpdev.entity.enums.Brand;
-import com.dpdev.entity.enums.ProductType;
 import com.dpdev.integration.IntegrationTestBase;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
 
+import static com.dpdev.entity.QProduct.product;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RequiredArgsConstructor
@@ -21,83 +21,22 @@ class ProductRepositoryIT extends IntegrationTestBase {
     private final ProductRepository productRepository;
 
     @Test
-    void saveProduct() {
-        Product product = createProduct();
-
-        productRepository.save(product);
-        entityManager.clear();
-
-        assertThat(product.getId()).isNotNull();
-    }
-
-    @Test
-    void updateProduct() {
-        Product product = createProduct();
-        productRepository.save(product);
-        product.setBrand(Brand.MEGABASS);
-        product.setAvailability(false);
-
-        productRepository.update(product);
-        entityManager.flush();
-        entityManager.clear();
-
-        Product actualProduct = productRepository.findById(product.getId()).get();
-        assertThat(actualProduct).isEqualTo(product);
-    }
-
-    @Test
-    void delete() {
-        Product product = createProduct();
-        productRepository.save(product);
-        entityManager.clear();
-
-        productRepository.delete(product);
-
-        assertThat(productRepository.findById(product.getId())).isNotPresent();
-    }
-
-    @Test
-    void findById() {
-        Product expectedProduct = createProduct();
-        productRepository.save(expectedProduct);
-        entityManager.clear();
-
-        Optional<Product> maybeActualProduct = productRepository.findById(expectedProduct.getId());
-
-        assertThat(maybeActualProduct).isPresent();
-        assertThat(maybeActualProduct.get()).isEqualTo(expectedProduct);
-    }
-
-    @Test
-    void findAll() {
-        List<Product> expectedResult = productRepository.findAll();
-
-        assertThat(expectedResult).hasSize(13);
-    }
-
-    @Test
     void findProductByBrandAndPrice() {
         ProductFilter filter = ProductFilter.builder()
                 .brand(Brand.SHIMANO)
                 .minPrice(new BigDecimal("100.00"))
                 .maxPrice(new BigDecimal("400.00"))
                 .build();
+        Predicate predicate = QPredicate.builder()
+                .add(filter.getBrand(), product.brand::eq)
+                .add(filter.getProductType(), product.productType::eq)
+                .add(filter.getPrice(), product.price::eq)
+                .add(filter.getMinPrice(), product.price::goe)
+                .add(filter.getMaxPrice(), product.price::loe)
+                .buildAnd();
 
-        List<Product> actualProducts = productRepository.findProductByBrandAndTypeAndPrice(filter);
+        Iterable<Product> actualProducts = productRepository.findAll(predicate);
 
         assertThat(actualProducts).hasSize(2);
-    }
-
-    @Test
-    void findProductByBrandAndTypeAndPrice() {
-        ProductFilter filter = ProductFilter.builder()
-                .brand(Brand.MEGABASS)
-                .productType(ProductType.BAIT)
-                .minPrice(new BigDecimal("20.00"))
-                .build();
-
-        List<Product> actualProducts = productRepository.findProductByBrandAndTypeAndPrice(filter);
-
-        assertThat(actualProducts).hasSize(1);
     }
 }
