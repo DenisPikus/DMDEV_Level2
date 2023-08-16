@@ -18,26 +18,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
-import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-@NamedEntityGraph(
-        name = "WithUserAndOrderedProducts",
-        attributeNodes = {
-                @NamedAttributeNode("user"),
-                @NamedAttributeNode(value = "orderProducts", subgraph = "products")
-
-        },
-        subgraphs = {
-                @NamedSubgraph(name = "products",
-                        attributeNodes = @NamedAttributeNode("product"))
-        }
-)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

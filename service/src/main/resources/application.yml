@@ -9,14 +9,12 @@ spring:
       hibernate.format_sql: true
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
 
 logging:
   pattern:
       console: "%d %-5level %logger : %msg%n"
       file: "%d %-5level [%thread] %logger : %msg%n"
-  level:
-    root: INFO
   file:
     path: /
     name: dpdev.log

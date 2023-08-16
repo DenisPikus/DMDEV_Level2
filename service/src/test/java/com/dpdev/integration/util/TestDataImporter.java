@@ -1,5 +1,7 @@
 package com.dpdev.integration.util;
 
+import lombok.experimental.UtilityClass;
+
 import com.dpdev.entity.OrderProduct;
 import com.dpdev.entity.Orders;
 import com.dpdev.entity.Product;
@@ -9,7 +11,6 @@ import com.dpdev.entity.enums.Brand;
 import com.dpdev.entity.enums.OrderStatus;
 import com.dpdev.entity.enums.ProductType;
 import com.dpdev.entity.enums.Role;
-import lombok.experimental.UtilityClass;
 
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
