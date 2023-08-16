@@ -1,4 +1,4 @@
-package com.dpdev.dao;
+package com.dpdev.repository;
 
 import com.dpdev.entity.Orders;
 import org.springframework.data.jpa.repository.EntityGraph;

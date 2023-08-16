@@ -17,6 +17,7 @@ CREATE TABLE users
     address      VARCHAR(128)        NOT NULL,
     role         VARCHAR(32)         NOT NULL
 );
+--rollback DROP TABLE users;
 
 --changeset dpikus:3
 CREATE TABLE product
@@ -31,6 +32,7 @@ CREATE TABLE product
     photo_path   VARCHAR(128),
     stock_id     BIGINT
 );
+--rollback DROP TABLE product;
 
 --changeset dpikus:4
 CREATE TABLE stock
@@ -41,6 +43,7 @@ CREATE TABLE stock
     address    VARCHAR(128),
     FOREIGN KEY (product_id) REFERENCES Product (id) ON DELETE CASCADE
 );
+--rollback DROP TABLE stock;
 
 --changeset dpikus:5
 CREATE TABLE orders
@@ -51,6 +54,7 @@ CREATE TABLE orders
     closing_date  TIMESTAMP,
     order_status   VARCHAR(32)
 );
+--rollback DROP TABLE orders;
 
 --changeset dpikus:6
 CREATE TABLE orders_product
@@ -64,3 +68,4 @@ CREATE TABLE orders_product
     FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE,
     UNIQUE (order_id, product_id)
 );
+--rollback DROP TABLE orders_product;

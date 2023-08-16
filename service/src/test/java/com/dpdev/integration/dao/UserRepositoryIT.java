@@ -1,6 +1,6 @@
 package com.dpdev.integration.dao;
 
-import com.dpdev.dao.UserRepository;
+import com.dpdev.repository.UserRepository;
 import com.dpdev.dto.UserWithAvgPriceProjection;
 import com.dpdev.integration.IntegrationTestBase;
 import lombok.RequiredArgsConstructor;

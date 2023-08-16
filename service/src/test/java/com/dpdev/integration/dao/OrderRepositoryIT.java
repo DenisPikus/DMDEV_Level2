@@ -1,9 +1,9 @@
 package com.dpdev.integration.dao;
 
-import com.dpdev.dao.OrderProductRepository;
-import com.dpdev.dao.OrderRepository;
-import com.dpdev.dao.ProductRepository;
-import com.dpdev.dao.UserRepository;
+import com.dpdev.repository.OrderProductRepository;
+import com.dpdev.repository.OrderRepository;
+import com.dpdev.repository.ProductRepository;
+import com.dpdev.repository.UserRepository;
 import com.dpdev.entity.OrderProduct;
 import com.dpdev.entity.Orders;
 import com.dpdev.entity.Product;

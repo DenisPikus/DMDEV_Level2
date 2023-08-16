@@ -1,4 +1,4 @@
-package com.dpdev.dao;
+package com.dpdev.repository;
 
 import com.dpdev.dto.UserWithAvgPriceProjection;
 import com.dpdev.entity.User;

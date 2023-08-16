@@ -9,6 +9,8 @@ import com.dpdev.entity.enums.Brand;
 import com.dpdev.entity.enums.OrderStatus;
 import com.dpdev.entity.enums.ProductType;
 import com.dpdev.entity.enums.Role;
+import com.dpdev.integration.util.TestDataImporter;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -33,6 +35,11 @@ public abstract class IntegrationTestBase {
     @DynamicPropertySource
     static void setProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
+    }
+
+    @BeforeEach
+    void startSession() {
+        TestDataImporter.importData(entityManager);
     }
 
     public static User createUser() {

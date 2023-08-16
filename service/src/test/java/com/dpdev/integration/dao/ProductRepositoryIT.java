@@ -1,7 +1,7 @@
 package com.dpdev.integration.dao;
 
-import com.dpdev.dao.ProductRepository;
-import com.dpdev.dao.QPredicate;
+import com.dpdev.repository.ProductRepository;
+import com.dpdev.repository.QPredicate;
 import com.dpdev.dto.ProductFilter;
 import com.dpdev.entity.Product;
 import com.dpdev.entity.enums.Brand;
