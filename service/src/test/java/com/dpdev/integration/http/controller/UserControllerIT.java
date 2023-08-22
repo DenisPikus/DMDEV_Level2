@@ -110,9 +110,6 @@ class UserControllerIT extends IntegrationTestBase {
 
     @Test
     public void testDeleteUser() throws Exception {
-
-        //when(userService.delete(USER_ID)).thenReturn(true);
-
         mockMvc.perform(post("/users/{id}/delete", USER_ID))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/users"));
@@ -120,8 +117,6 @@ class UserControllerIT extends IntegrationTestBase {
 
     @Test
     public void testDeleteUser_NotFound() throws Exception {
-       // when(userService.delete(INVALID_USER_ID)).thenReturn(false);
-
         mockMvc.perform(post("/users/{id}/delete", INVALID_USER_ID))
                 .andExpect(status().isNotFound());
     }

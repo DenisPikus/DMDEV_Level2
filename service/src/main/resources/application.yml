@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=public
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: admin
     driver-class-name: org.postgresql.Driver
@@ -10,7 +10,7 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: validate
-
+    open-in-view: false
 logging:
   pattern:
       console: "%d %-5level %logger : %msg%n"

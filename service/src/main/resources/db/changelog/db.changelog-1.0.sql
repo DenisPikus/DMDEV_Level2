@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS users
     firstname    VARCHAR(128)        NOT NULL,
     lastname     VARCHAR(128)        NOT NULL,
     email        VARCHAR(128) UNIQUE NOT NULL,
-    password     VARCHAR(128)        NOT NULL,
+    password     VARCHAR(128),
     phone_number VARCHAR(128) UNIQUE NOT NULL,
     address      VARCHAR(128)        NOT NULL,
     role         VARCHAR(32)         NOT NULL

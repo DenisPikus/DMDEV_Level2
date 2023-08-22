@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
 @Controller
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -55,22 +54,21 @@ public class UserController {
     }
 
     @PostMapping
-    public String create(@ModelAttribute UserCreateEditDto user, RedirectAttributes redirectAttributes) {
-        if (true) {
-            redirectAttributes.addFlashAttribute("user", user);
-            return "redirect:/users/registration";
-        }
+    public String create(@ModelAttribute("user") UserCreateEditDto user, RedirectAttributes redirectAttributes) {
+//        if (true) {
+//            redirectAttributes.addFlashAttribute("user", user);
+//            return "redirect:/users/registration";
+//        }
         return "redirect:/users/" + userService.create(user).getId();
     }
 
     @PostMapping("/{id}/update")
-    public String update(@PathVariable Long id, @ModelAttribute UserCreateEditDto user) {
+    public String update(@PathVariable Long id, @ModelAttribute("user") UserCreateEditDto user) {
         return userService.update(id, user)
                 .map(it -> "redirect:/users/{id}")
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    //@DeleteMapping("/{id}")
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Long id) {
         if (!userService.delete(id)) {
