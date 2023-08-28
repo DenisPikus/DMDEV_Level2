@@ -1,7 +1,7 @@
 package com.dpdev.integration.service;
 
 import com.dpdev.dto.UserCreateEditDto;
-import com.dpdev.dto.UserFilter;
+import com.dpdev.dto.filter.UserFilter;
 import com.dpdev.dto.UserReadDto;
 import com.dpdev.entity.enums.Role;
 import com.dpdev.integration.IntegrationTestBase;

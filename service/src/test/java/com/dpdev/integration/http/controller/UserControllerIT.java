@@ -29,11 +29,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RequiredArgsConstructor
 class UserControllerIT extends IntegrationTestBase {
 
-    public static final Long USER_ID = 1L;
-    public static final Long INVALID_USER_ID = -1L;
+    private static final Long USER_ID = 1L;
+    private static final Long INVALID_USER_ID = -1L;
 
     private final MockMvc mockMvc;
-    private final UserService userService;
 
     @Test
     void registration() throws Exception {

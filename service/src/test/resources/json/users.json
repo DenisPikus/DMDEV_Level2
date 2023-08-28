@@ -1,0 +1,63 @@
+{
+  "content": [
+    {
+      "id": 1,
+      "firstname": "Ivan",
+      "lastname": "Ivanov",
+      "email": "ivan@gmail.com",
+      "phoneNumber": "1234567890",
+      "address": "BY, Minsk, 123 Sovetskaja St",
+      "role": "USER"
+    },
+    {
+      "id": 2,
+      "firstname": "Sergey",
+      "lastname": "Sergeev",
+      "email": "sergey@gmail.com",
+      "phoneNumber": "9876543210",
+      "address": "BY, Minsk, 121 Sovetskaja St",
+      "role": "USER"
+    },
+    {
+      "id": 3,
+      "firstname": "Viktor",
+      "lastname": "Pupkin",
+      "email": "viktor@gmail.com",
+      "phoneNumber": "5555555551",
+      "address": "BY, Minsk, 1 Sovetskaja St",
+      "role": "USER"
+    },
+    {
+      "id": 4,
+      "firstname": "Andrey",
+      "lastname": "Egorov",
+      "email": "andrey@gmail.com",
+      "phoneNumber": "9876543211",
+      "address": "BY, Minsk, 121 Sovetskaja St",
+      "role": "USER"
+    },
+    {
+      "id": 5,
+      "firstname": "Sveta",
+      "lastname": "Egorova",
+      "email": "sveta@gmail.com",
+      "phoneNumber": "98765432122",
+      "address": "BY, Minsk, 121 Sovetskaja St",
+      "role": "USER"
+    },
+    {
+      "id": 6,
+      "firstname": "Viktor",
+      "lastname": "Petrov",
+      "email": "viktorpetrov@gmail.com",
+      "phoneNumber": "5555555555",
+      "address": "BY, Minsk, 1 Sovetskaja St",
+      "role": "ADMIN"
+    }
+  ],
+  "metadata": {
+    "page": 0,
+    "size": 20,
+    "totalElements": 6
+  }
+}
