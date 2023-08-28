@@ -4,6 +4,6 @@ import com.dpdev.integration.IntegrationTestBase;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class OrdersProductRepositoryIT extends IntegrationTestBase {
+public class OrderItemRepositoryIT extends IntegrationTestBase {
 
 }

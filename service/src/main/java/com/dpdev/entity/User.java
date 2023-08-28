@@ -44,7 +44,7 @@ public class User implements BaseEntity<Long> {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false, unique = true)
@@ -56,6 +56,8 @@ public class User implements BaseEntity<Long> {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    private String image;
 
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

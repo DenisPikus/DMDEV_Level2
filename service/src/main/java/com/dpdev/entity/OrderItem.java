@@ -23,8 +23,8 @@ import java.math.BigDecimal;
 @ToString(exclude = {"order", "product"})
 @Builder
 @Entity
-@Table(name = "orders_product")
-public class OrderProduct implements BaseEntity<Long> {
+@Table(name = "order_item")
+public class OrderItem implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +42,6 @@ public class OrderProduct implements BaseEntity<Long> {
 
     public void setOrders(Orders order) {
         this.order = order;
-        this.order.getOrderProducts().add(this);
+        this.order.getOrderItems().add(this);
     }
 }

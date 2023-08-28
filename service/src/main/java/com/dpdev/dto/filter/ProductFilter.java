@@ -1,4 +1,4 @@
-package com.dpdev.dto;
+package com.dpdev.dto.filter;
 
 import com.dpdev.entity.enums.Brand;
 import com.dpdev.entity.enums.ProductType;
