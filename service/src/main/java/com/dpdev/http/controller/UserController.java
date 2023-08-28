@@ -2,7 +2,7 @@ package com.dpdev.http.controller;
 
 import com.dpdev.dto.PageResponse;
 import com.dpdev.dto.UserCreateEditDto;
-import com.dpdev.dto.UserFilter;
+import com.dpdev.dto.filter.UserFilter;
 import com.dpdev.dto.UserReadDto;
 import com.dpdev.entity.enums.Role;
 import com.dpdev.service.UserService;
@@ -55,10 +55,10 @@ public class UserController {
 
     @PostMapping
     public String create(@ModelAttribute("user") UserCreateEditDto user, RedirectAttributes redirectAttributes) {
-//        if (true) {
-//            redirectAttributes.addFlashAttribute("user", user);
-//            return "redirect:/users/registration";
-//        }
+        if (true) {
+            redirectAttributes.addFlashAttribute("user", user);
+            return "redirect:/users/registration";
+        }
         return "redirect:/users/" + userService.create(user).getId();
     }
 

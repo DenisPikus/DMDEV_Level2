@@ -1,11 +1,11 @@
 -- Fill in users table
-INSERT INTO users (id, firstname, lastname, email, password, phone_number, address, role)
-VALUES (1, 'Ivan', 'Ivanov', 'ivan@gmail.com', 'pass', '1234567890', 'BY, Minsk, 123 Sovetskaja St', 'USER'),
-       (2, 'Sergey', 'Sergeev', 'sergey@gmail.com', 'pass', '9876543210', 'BY, Minsk, 121 Sovetskaja St', 'USER'),
-       (3, 'Viktor', 'Pupkin', 'viktor@gmail.com', 'pass', '5555555551', 'BY, Minsk, 1 Sovetskaja St', 'USER'),
-       (4, 'Andrey', 'Egorov', 'andrey@gmail.com', 'pass', '9876543211', 'BY, Minsk, 121 Sovetskaja St', 'USER'),
-       (5, 'Sveta', 'Egorova', 'sveta@gmail.com', 'pass', '98765432122', 'BY, Minsk, 121 Sovetskaja St', 'USER'),
-       (6, 'Viktor', 'Petrov', 'viktorpetrov@gmail.com', 'pass', '5555555555', 'BY, Minsk, 1 Sovetskaja St', 'ADMIN');
+INSERT INTO users (id, firstname, lastname, email, password, phone_number, address, role, image)
+VALUES (1, 'Ivan', 'Ivanov', 'ivan@gmail.com', 'pass', '1234567890', 'BY, Minsk, 123 Sovetskaja St', 'USER', 'avatar_1.png'),
+       (2, 'Sergey', 'Sergeev', 'sergey@gmail.com', 'pass', '9876543210', 'BY, Minsk, 121 Sovetskaja St', 'USER', 'avatar_2.png'),
+       (3, 'Viktor', 'Pupkin', 'viktor@gmail.com', 'pass', '5555555551', 'BY, Minsk, 1 Sovetskaja St', 'USER', 'avatar_1.png'),
+       (4, 'Andrey', 'Egorov', 'andrey@gmail.com', 'pass', '9876543211', 'BY, Minsk, 121 Sovetskaja St', 'USER', ''),
+       (5, 'Sveta', 'Egorova', 'sveta@gmail.com', 'pass', '98765432122', 'BY, Minsk, 121 Sovetskaja St', 'USER', ''),
+       (6, 'Viktor', 'Petrov', 'viktorpetrov@gmail.com', 'pass', '5555555555', 'BY, Minsk, 1 Sovetskaja St', 'ADMIN', '');
 
 SELECT SETVAL('users_id_seq', (SELECT MAX(id) FROM users));
 
@@ -64,8 +64,8 @@ VALUES (1, 1, '2023-06-30', '2023-06-30', 'COMPLETED'),
 
 SELECT SETVAL('orders_id_seq', (SELECT MAX(id) FROM orders));
 
--- Fill in orders_product table
-INSERT INTO orders_product (id, order_id, product_id, quantity, price)
+-- Fill in order_item table
+INSERT INTO order_item (id, order_id, product_id, quantity, price)
 VALUES (1, 1, 1, 2, (SELECT price FROM product WHERE product.id = 1)),
        (2, 1, 4, 2, (SELECT price FROM product WHERE product.id = 4)),
        (3, 1, 8, 1, (SELECT price FROM product WHERE product.id = 8)),
@@ -86,5 +86,5 @@ VALUES (1, 1, 1, 2, (SELECT price FROM product WHERE product.id = 1)),
        (18, 7, 11, 2, (SELECT price FROM product WHERE product.id = 11)),
        (19, 7, 12, 2, (SELECT price FROM product WHERE product.id = 12));
 
-SELECT SETVAL('orders_product_id_seq', (SELECT MAX(id) FROM orders_product));
+SELECT SETVAL('order_item_id_seq', (SELECT MAX(id) FROM order_item));
 

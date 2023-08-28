@@ -1,4 +1,4 @@
-package com.dpdev.dto;
+package com.dpdev.dto.filter;
 
 import lombok.Builder;
 import lombok.Value;

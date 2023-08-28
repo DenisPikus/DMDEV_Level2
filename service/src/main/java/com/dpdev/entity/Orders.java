@@ -26,8 +26,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "orderProducts")
-@EqualsAndHashCode(exclude = "orderProducts")
+@ToString(exclude = "orderItems")
+@EqualsAndHashCode(exclude = "orderItems")
 @Builder
 @Entity
 public class Orders implements BaseEntity<Long> {
@@ -49,5 +49,5 @@ public class Orders implements BaseEntity<Long> {
 
     @Builder.Default
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderProduct> orderProducts = new ArrayList<>();
+    private List<OrderItem> orderItems = new ArrayList<>();
 }

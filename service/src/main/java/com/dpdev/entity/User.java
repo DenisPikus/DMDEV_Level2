@@ -57,6 +57,8 @@ public class User implements BaseEntity<Long> {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private String image;
+
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Orders> orders = new ArrayList<>();

@@ -12,7 +12,7 @@ public interface UserRepository extends JpaRepository<User, Long>, FilterUserRep
 
     @Query(value = "select u.email as email, avg(op.quantity * op.price) as avgPrice from User u " +
             "join u.orders o " +
-            "join o.orderProducts op " +
+            "join o.orderItems op " +
             "group by u.email " +
             "order by u.email")
     List<UserWithAvgPriceProjection> findUsersWithAvgOrdersOrderedByEmail();

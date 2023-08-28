@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS orders
 --rollback DROP TABLE orders;
 
 --changeset dpikus:5
-CREATE TABLE IF NOT EXISTS orders_product
+CREATE TABLE IF NOT EXISTS order_item
 (
     id         BIGSERIAL PRIMARY KEY,
     order_id   BIGINT NOT NULL,
@@ -63,4 +63,4 @@ CREATE TABLE IF NOT EXISTS orders_product
     FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE,
     UNIQUE (order_id, product_id)
 );
---rollback DROP TABLE orders_product;
+--rollback DROP TABLE order_item;

@@ -1,6 +1,6 @@
 package com.dpdev.repository;
 
-import com.dpdev.dto.UserFilter;
+import com.dpdev.dto.filter.UserFilter;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.dpdev.entity.User;
