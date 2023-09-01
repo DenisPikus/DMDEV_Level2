@@ -3,15 +3,17 @@ package com.dpdev.integration.service;
 import com.dpdev.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 
-import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -19,22 +21,28 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-@TestPropertySource(properties = {
-        "app.image.bucket=/Users/Denis/maven-homework/images/"
-})
 @RequiredArgsConstructor
 public class ImageServiceIT {
+
+    @DynamicPropertySource
+    static void setProperties(DynamicPropertyRegistry registry) {
+        registry.add("app.image.bucket", () -> System.getProperty("java.io.tmpdir"));
+    }
+
+    @Value("${app.image.bucket}")
+    private final String bucket;
 
     private final ImageService imageService;
 
     @Test
-    void uploadAndGetImageTest() throws IOException {
+    void uploadAndGetImage() throws IOException {
         String imagePath = "test-image.png";
+        Path absolutePath = Path.of(bucket, imagePath);
         String content = "Test image content";
-        InputStream inputStream = new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
-        MockMultipartFile imageFile = new MockMultipartFile("image", imagePath, MediaType.APPLICATION_OCTET_STREAM_VALUE, inputStream);
+        Files.write(absolutePath, content.getBytes());
+        File imageFile = new File(absolutePath.toString());
 
-        imageService.upload(imagePath, imageFile.getInputStream());
+        imageService.upload(imagePath, new FileInputStream(imageFile));
 
         Optional<byte[]> actualResult = imageService.get(imagePath);
 
@@ -43,7 +51,7 @@ public class ImageServiceIT {
     }
 
     @Test
-    void getIfImageNotExistTest() {
+    void getIfImageNotExist() {
         Optional<byte[]> retrievedImage = imageService.get("dummy.png");
 
         assertFalse(retrievedImage.isPresent());

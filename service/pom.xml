@@ -12,11 +12,6 @@
 
     <artifactId>service</artifactId>
 
-    <properties>
-        <testcontainers.version>1.18.3</testcontainers.version>
-        <springdoc.version>1.7.0</springdoc.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.dpdev</groupId>

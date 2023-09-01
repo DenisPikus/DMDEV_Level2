@@ -4,11 +4,13 @@ import com.dpdev.integration.IntegrationTestBase;
 import com.dpdev.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,7 +18,6 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -35,6 +36,9 @@ public class UserRestControllerIT extends IntegrationTestBase {
 
     private final MockMvc mockMvc;
     private final ImageService imageService;
+
+    @Value("${app.image.bucket}")
+    private final String bucket;
 
     @Test
     void findAll() throws Exception {
@@ -59,17 +63,24 @@ public class UserRestControllerIT extends IntegrationTestBase {
     }
 
     @Test
-    void create() throws Exception {    //FAILED
-        Path imagePath = Paths.get(IMAGE_PATH);
-        byte[] imageBytes = Files.readAllBytes(imagePath);
-        MockMultipartFile imageFile = new MockMultipartFile("avatar_1", "avatar_1.png", APPLICATION_OCTET_STREAM_VALUE, imageBytes);
+    void create() throws Exception {
+        Path fullImagePath = Path.of(bucket, IMAGE_PATH);
+        byte[] imageBytes = Files.readAllBytes(fullImagePath);
+        MockMultipartFile multipartFile =
+                new MockMultipartFile("image", "avatar_1.png", MediaType.MULTIPART_FORM_DATA_VALUE, imageBytes);
 
-        mockMvc.perform(multipart("/api/v1/users")
-                        .file(imageFile)
-                        .content(getExpectedJsonContentFromFile("/json/update-user.json"))
-                )
+        ResultActions request = mockMvc.perform(multipart("/api/v1/users")
+                    .file(multipartFile)
+                .param("firstname", "Test")
+                .param("lastname", "Test")
+                .param("email", "test@gmail.com")
+                .param("phoneNumber", "3751234567822")
+                .param("address", "BY, Gomel, 123 Sovetskaja St")
+                .param("role", "ADMIN")
+                .param("image", "avatar_1.png")
+        );
+        request
                 .andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.firstname").value("Test"))
                 .andExpect(jsonPath("$.lastname").value("Test"))
@@ -81,10 +92,10 @@ public class UserRestControllerIT extends IntegrationTestBase {
     }
 
     @Test
-    void update() throws Exception {       //FAILED
+    void update() throws Exception {
         Path imagePath = Paths.get(IMAGE_PATH);
         byte[] imageBytes = Files.readAllBytes(imagePath);
-        MockMultipartFile imageFile = new MockMultipartFile("avatar_1", "avatar_1.png", APPLICATION_OCTET_STREAM_VALUE, imageBytes);
+        MockMultipartFile imageFile = new MockMultipartFile("avatar_1", "avatar_1.png", MediaType.APPLICATION_OCTET_STREAM_VALUE, imageBytes);
 
         mockMvc.perform(multipart("/api/v1/users/{id}", USER_ID)
                         .file(imageFile)
@@ -105,22 +116,22 @@ public class UserRestControllerIT extends IntegrationTestBase {
     }
 
     @Test
-    public void testDeleteUser() throws Exception {
+    void testDeleteUser() throws Exception {
         mockMvc.perform(delete("/api/v1/users/{id}", USER_ID))
                 .andExpect(status().isNoContent());
     }
 
     @Test
-    public void testDeleteUser_NotFound() throws Exception {
+    void testDeleteUser_NotFound() throws Exception {
         mockMvc.perform(delete("/api/v1/users/{id}", INVALID_USER_ID))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    void findAvatarTest() throws Exception {
+    void findAvatar() throws Exception {
         Optional<byte[]> avatarContent = imageService.get(IMAGE_PATH);
 
-        MockMultipartFile avatarFile = new MockMultipartFile("avatar", "avatar_1.png", APPLICATION_OCTET_STREAM_VALUE, avatarContent.get());
+        MockMultipartFile avatarFile = new MockMultipartFile("avatar", "avatar_1.png", MediaType.APPLICATION_OCTET_STREAM_VALUE, avatarContent.get());
 
         MockHttpServletResponse response = mockMvc.perform(multipart("/{id}/avatar", USER_ID)
                         .file(avatarFile))

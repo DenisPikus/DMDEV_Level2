@@ -35,7 +35,7 @@ public class UserRestController {
 
     private final UserService userService;
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
     public PageResponse<UserReadDto> findAll(UserFilter filter, Pageable pageable) {
         Page<UserReadDto> page = userService.findAll(filter, pageable);
         return PageResponse.of(page);
@@ -49,7 +49,7 @@ public class UserRestController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserReadDto create(@Validated @RequestBody @NonNull UserCreateEditDto user) {
+    public UserReadDto create(@Validated @RequestBody UserCreateEditDto user) {
         return userService.create(user);
     }
 
