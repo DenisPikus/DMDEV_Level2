@@ -52,8 +52,13 @@ public class Product implements BaseEntity<Long> {
     @Column(nullable = false)
     private Boolean availability;
 
-    private String photoPath;
+    private String image;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Stock stock;
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
+        stock.setProduct(this);
+    }
 }

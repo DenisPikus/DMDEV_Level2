@@ -18,3 +18,7 @@ logging:
   file:
     path: /
     name: dpdev.log
+
+app:
+  image:
+    bucket: "/Users/Denis/maven-homework/images"

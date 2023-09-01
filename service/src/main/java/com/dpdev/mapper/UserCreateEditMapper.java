@@ -3,6 +3,11 @@ package com.dpdev.mapper;
 import com.dpdev.dto.UserCreateEditDto;
 import com.dpdev.entity.User;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Optional;
+
+import static java.util.function.Predicate.not;
 
 @Component
 public class UserCreateEditMapper implements Mapper<UserCreateEditDto, User> {
@@ -28,5 +33,9 @@ public class UserCreateEditMapper implements Mapper<UserCreateEditDto, User> {
         user.setPhoneNumber(object.getPhoneNumber());
         user.setAddress(object.getAddress());
         user.setRole(object.getRole());
+
+        Optional.ofNullable(object.getImage())
+                .filter(not(MultipartFile::isEmpty))
+                .ifPresent(image -> user.setImage(image.getOriginalFilename()));
     }
 }

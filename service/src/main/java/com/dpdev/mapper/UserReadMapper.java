@@ -17,6 +17,7 @@ public class UserReadMapper implements Mapper<User, UserReadDto> {
                 .phoneNumber(object.getPhoneNumber())
                 .address(object.getAddress())
                 .role(object.getRole())
+                .image(object.getImage())
                 .build();
     }
 }

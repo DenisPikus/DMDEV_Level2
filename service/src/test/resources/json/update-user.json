@@ -1,0 +1,9 @@
+{
+  "firstname": "Test",
+  "lastname": "Test",
+  "email": "test@gmail.com",
+  "phoneNumber": "3751234567890",
+  "address": "BY, Gomel, 123 Sovetskaja St",
+  "role": "ADMIN",
+  "image": "/Users/Denis/maven-homework/images/avatar_2.png"
+}

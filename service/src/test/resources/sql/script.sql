@@ -10,7 +10,7 @@ VALUES (1, 'Ivan', 'Ivanov', 'ivan@gmail.com', 'pass', '1234567890', 'BY, Minsk,
 SELECT SETVAL('users_id_seq', (SELECT MAX(id) FROM users));
 
 -- Fill in product table
-INSERT INTO product (id, name, brand, product_type, description, price, availability, photo_path)
+INSERT INTO product (id, name, brand, product_type, description, price, availability, image)
 VALUES (1, 'Cardiff', 'SHIMANO', 'BAIT', 'Metal spoon, weight 10gr, length 8cm.', 10.00, true, null),
        (2, 'SPOON-X', 'MEGABASS', 'BAIT', 'Metal spoon, weight 8gr, length 5cm.', 8.00, true, null),
        (3, 'Timon', 'JACKALL', 'BAIT', 'Metal spoon, weight 2.7gr, length 4cm.', 5.00, false, null),
