@@ -2,7 +2,7 @@
   "id": 1,
   "firstname": "Ivan",
   "lastname": "Ivanov",
-  "email": "ivan@gmail.com",
+  "username": "ivan@gmail.com",
   "phoneNumber": "1234567890",
   "address": "BY, Minsk, 123 Sovetskaja St",
   "role": "USER",

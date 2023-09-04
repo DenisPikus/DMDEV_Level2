@@ -2,6 +2,7 @@ package com.dpdev.integration;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -20,6 +21,7 @@ import static com.dpdev.integration.util.ContainerTestUtil.postgres;
 @Sql({
         "classpath:sql/script.sql"
 })
+@WithMockUser(username = "user@mail.com", password = "test", authorities = {"ADMIN", "USER"})
 public abstract class IntegrationTestBase {
 
     @DynamicPropertySource

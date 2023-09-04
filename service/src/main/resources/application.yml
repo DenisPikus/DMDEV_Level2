@@ -11,7 +11,10 @@ spring:
     hibernate:
       ddl-auto: validate
     open-in-view: false
-logging:
+  thymeleaf:
+    extras:
+      springsecurity5:
+        enabled=true:logging:
   pattern:
       console: "%d %-5level %logger : %msg%n"
       file: "%d %-5level [%thread] %logger : %msg%n"
@@ -22,3 +25,4 @@ logging:
 app:
   image:
     bucket: "/Users/Denis/maven-homework/images"
+

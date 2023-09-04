@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS users
     id           BIGSERIAL PRIMARY KEY,
     firstname    VARCHAR(128)        NOT NULL,
     lastname     VARCHAR(128)        NOT NULL,
-    email        VARCHAR(128) UNIQUE NOT NULL,
+    username        VARCHAR(128) UNIQUE NOT NULL,
     password     VARCHAR(128),
     phone_number VARCHAR(128) UNIQUE NOT NULL,
     address      VARCHAR(128)        NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS product
     description  VARCHAR(255),
     price        DECIMAL(6, 2),
     availability BOOLEAN      NOT NULL,
-    photo_path   VARCHAR(128),
+    image   VARCHAR(128),
     stock_id     BIGINT
 );
 --rollback DROP TABLE product;

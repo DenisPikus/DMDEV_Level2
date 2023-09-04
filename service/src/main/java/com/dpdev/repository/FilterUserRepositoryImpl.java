@@ -21,7 +21,7 @@ public class FilterUserRepositoryImpl implements FilterUserRepository {
         Predicate predicate = QPredicate.builder()
                 .add(filter.getFirstname(), user.firstname::containsIgnoreCase)
                 .add(filter.getLastname(), user.lastname::containsIgnoreCase)
-                .add(filter.getEmail(), user.email::containsIgnoreCase)
+                .add(filter.getUsername(), user.username::containsIgnoreCase)
                 .buildAnd();
         return new JPAQuery<User>(entityManager)
                 .select(user)

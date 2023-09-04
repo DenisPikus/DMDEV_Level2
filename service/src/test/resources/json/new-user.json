@@ -1,7 +1,7 @@
 {
   "firstname": "Test",
   "lastname": "Test",
-  "email": "test@gmail.com",
+  "username": "test@gmail.com",
   "phoneNumber": "3751234567822",
   "address": "BY, Gomel, 123 Sovetskaja St",
   "role": "USER",

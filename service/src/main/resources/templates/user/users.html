@@ -5,6 +5,7 @@
     <title>Users</title>
 </head>
 <body>
+<div th:insert="~{fragment :: header}"></div>
 <form action="/users">
     <label for="firstname">Firstname:
         <input id="firstname" type="text" name="firstname" th:value="${filter.firstname}">
@@ -12,8 +13,8 @@
     <label for="lastname">Lastname:
         <input id="lastname" type="text" name="lastname" th:value="${filter.lastname}">
     </label>
-    <label for="email">Email:
-        <input id="email" type="text" name="email" th:value="${filter.email}">
+    <label for="username">Email:
+        <input id="username" type="text" name="username" th:value="${filter.username}">
     </label>
     <div>
         <label for="page">Page:
