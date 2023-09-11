@@ -32,7 +32,7 @@ class UserServiceIT extends IntegrationTestBase {
     @Test
     void findAll() {
         UserFilter filter = UserFilter.builder()
-                .email("gmail")
+                .username("gmail")
                 .build();
         Pageable pageable = PageRequest.of(0, 4);
 
@@ -41,11 +41,11 @@ class UserServiceIT extends IntegrationTestBase {
         assertThat(actualResult).isNotEmpty();
         assertThat(actualResult).hasSize(4);
 
-        List<String> actualEmails = actualResult.stream()
-                .map(obj -> obj.getEmail())
+        List<String> actualusernames = actualResult.stream()
+                .map(obj -> obj.getUsername())
                 .collect(Collectors.toList());
 
-        assertThat(actualEmails).contains(
+        assertThat(actualusernames).contains(
                 "ivan@gmail.com",
                 "sergey@gmail.com",
                 "viktor@gmail.com",
@@ -62,7 +62,7 @@ class UserServiceIT extends IntegrationTestBase {
             assertThat(obj.getId()).isEqualTo(USER_ID);
             assertThat(obj.getFirstname()).isEqualTo("Ivan");
             assertThat(obj.getLastname()).isEqualTo("Ivanov");
-            assertThat(obj.getEmail()).isEqualTo("ivan@gmail.com");
+            assertThat(obj.getUsername()).isEqualTo("ivan@gmail.com");
             assertThat(obj.getPhoneNumber()).isEqualTo("1234567890");
             assertThat(obj.getAddress()).isEqualTo("BY, Minsk, 123 Sovetskaja St");
             assertSame(obj.getRole(), Role.USER);
@@ -81,8 +81,8 @@ class UserServiceIT extends IntegrationTestBase {
         UserCreateEditDto userCreateEditDto = UserCreateEditDto.builder()
                 .firstname("User")
                 .lastname("User")
-                .email("user@gmail.com")
-                .password("pass")
+                .username("user@gmail.com")
+                .rawPassword("pass")
                 .phoneNumber("511112116")
                 .address("BY, Minsk, 300 Sovetskaja St")
                 .role(Role.USER)
@@ -96,7 +96,7 @@ class UserServiceIT extends IntegrationTestBase {
         maybeUser.ifPresent(obj -> {
             assertThat(obj.getFirstname()).isEqualTo(userCreateEditDto.getFirstname());
             assertThat(obj.getLastname()).isEqualTo(userCreateEditDto.getLastname());
-            assertThat(obj.getEmail()).isEqualTo(userCreateEditDto.getEmail());
+            assertThat(obj.getUsername()).isEqualTo(userCreateEditDto.getUsername());
             assertThat(obj.getPhoneNumber()).isEqualTo(userCreateEditDto.getPhoneNumber());
             assertThat(obj.getAddress()).isEqualTo(userCreateEditDto.getAddress());
             assertSame(obj.getRole(), userCreateEditDto.getRole());
@@ -108,8 +108,8 @@ class UserServiceIT extends IntegrationTestBase {
         UserCreateEditDto userCreateEditDto = UserCreateEditDto.builder()
                 .firstname("User")
                 .lastname("User")
-                .email("user@gmail.com")
-                .password("pass")
+                .username("user@gmail.com")
+                .rawPassword("pass")
                 .phoneNumber("511112116")
                 .address("BY, Minsk, 300 Sovetskaja St")
                 .role(Role.USER)
@@ -119,8 +119,8 @@ class UserServiceIT extends IntegrationTestBase {
         UserCreateEditDto updateUserDto = UserCreateEditDto.builder()
                 .firstname("User1")
                 .lastname("User1")
-                .email("user1@gmail.com")
-                .password("pass")
+                .username("user1@gmail.com")
+                .rawPassword("pass")
                 .phoneNumber("511112116")
                 .address("BY, Minsk, 300 Sovetskaja St")
                 .role(Role.ADMIN)
@@ -132,7 +132,7 @@ class UserServiceIT extends IntegrationTestBase {
         actualResult.ifPresent(obj -> {
             assertThat(obj.getFirstname()).isEqualTo(updateUserDto.getFirstname());
             assertThat(obj.getLastname()).isEqualTo(updateUserDto.getLastname());
-            assertThat(obj.getEmail()).isEqualTo(updateUserDto.getEmail());
+            assertThat(obj.getUsername()).isEqualTo(updateUserDto.getUsername());
             assertThat(obj.getPhoneNumber()).isEqualTo(updateUserDto.getPhoneNumber());
             assertThat(obj.getAddress()).isEqualTo(updateUserDto.getAddress());
             assertSame(obj.getRole(), updateUserDto.getRole());
@@ -144,8 +144,8 @@ class UserServiceIT extends IntegrationTestBase {
         UserCreateEditDto updateUserDto = UserCreateEditDto.builder()
                 .firstname("User1")
                 .lastname("User1")
-                .email("user1@gmail.com")
-                .password("pass")
+                .username("user1@gmail.com")
+                .rawPassword("pass")
                 .phoneNumber("511112116")
                 .address("BY, Minsk, 300 Sovetskaja St")
                 .role(Role.ADMIN)

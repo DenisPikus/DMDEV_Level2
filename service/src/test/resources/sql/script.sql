@@ -1,11 +1,11 @@
 -- Fill in users table
-INSERT INTO users (id, firstname, lastname, email, password, phone_number, address, role, image)
-VALUES (1, 'Ivan', 'Ivanov', 'ivan@gmail.com', 'pass', '1234567890', 'BY, Minsk, 123 Sovetskaja St', 'USER', 'avatar_1.png'),
-       (2, 'Sergey', 'Sergeev', 'sergey@gmail.com', 'pass', '9876543210', 'BY, Minsk, 121 Sovetskaja St', 'USER', 'avatar_2.png'),
-       (3, 'Viktor', 'Pupkin', 'viktor@gmail.com', 'pass', '5555555551', 'BY, Minsk, 1 Sovetskaja St', 'USER', 'avatar_1.png'),
-       (4, 'Andrey', 'Egorov', 'andrey@gmail.com', 'pass', '9876543211', 'BY, Minsk, 121 Sovetskaja St', 'USER', ''),
-       (5, 'Sveta', 'Egorova', 'sveta@gmail.com', 'pass', '98765432122', 'BY, Minsk, 121 Sovetskaja St', 'USER', ''),
-       (6, 'Viktor', 'Petrov', 'viktorpetrov@gmail.com', 'pass', '5555555555', 'BY, Minsk, 1 Sovetskaja St', 'ADMIN', '');
+INSERT INTO users (id, firstname, lastname, username, password, phone_number, address, role, image)
+VALUES (1, 'Ivan', 'Ivanov', 'ivan@gmail.com', '{noop}pass', '1234567890', 'BY, Minsk, 123 Sovetskaja St', 'USER', 'avatar_1.png'),
+       (2, 'Sergey', 'Sergeev', 'sergey@gmail.com', '{noop}pass', '9876543210', 'BY, Minsk, 121 Sovetskaja St', 'USER', 'avatar_2.png'),
+       (3, 'Viktor', 'Pupkin', 'viktor@gmail.com', '{noop}pass', '5555555551', 'BY, Minsk, 1 Sovetskaja St', 'USER', 'avatar_1.png'),
+       (4, 'Andrey', 'Egorov', 'andrey@gmail.com', '{noop}pass', '9876543211', 'BY, Minsk, 121 Sovetskaja St', 'USER', ''),
+       (5, 'Sveta', 'Egorova', 'sveta@gmail.com', '{noop}pass', '98765432122', 'BY, Minsk, 121 Sovetskaja St', 'USER', ''),
+       (6, 'Viktor', 'Petrov', 'viktorpetrov@gmail.com', '{noop}pass', '5555555555', 'BY, Minsk, 1 Sovetskaja St', 'ADMIN', '');
 
 SELECT SETVAL('users_id_seq', (SELECT MAX(id) FROM users));
 

@@ -1,5 +1,6 @@
 package com.dpdev.integration.http.rest;
 
+import com.dpdev.entity.enums.Role;
 import com.dpdev.integration.IntegrationTestBase;
 import com.dpdev.service.ImageService;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +19,13 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 
 @AutoConfigureMockMvc
 @RequiredArgsConstructor
@@ -70,21 +71,22 @@ public class UserRestControllerIT extends IntegrationTestBase {
                 new MockMultipartFile("image", "avatar_1.png", MediaType.MULTIPART_FORM_DATA_VALUE, imageBytes);
 
         ResultActions request = mockMvc.perform(multipart("/api/v1/users")
-                    .file(multipartFile)
-                .param("firstname", "Test")
-                .param("lastname", "Test")
-                .param("email", "test@gmail.com")
-                .param("phoneNumber", "3751234567822")
-                .param("address", "BY, Gomel, 123 Sovetskaja St")
-                .param("role", "ADMIN")
-                .param("image", "avatar_1.png")
+                        .file(multipartFile)
+                        .content(getExpectedJsonContentFromFile("/json/new-user.json"))
+//                .param("firstname", "Test")
+//                .param("lastname", "Test")
+//                .param("username", "test@gmail.com")
+//                .param("phoneNumber", "3751234567822")
+//                .param("address", "BY, Gomel, 123 Sovetskaja St")
+//                .param("role", "ADMIN")
+//                .param("image", "avatar_1.png")
         );
         request
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.firstname").value("Test"))
                 .andExpect(jsonPath("$.lastname").value("Test"))
-                .andExpect(jsonPath("$.email").value("test@gmail.com"))
+                .andExpect(jsonPath("$.username").value("test@gmail.com"))
                 .andExpect(jsonPath("$.phoneNumber").value("3751234567822"))
                 .andExpect(jsonPath("$.address").value("BY, Gomel, 123 Sovetskaja St"))
                 .andExpect(jsonPath("$.role").value("USER"))
@@ -107,7 +109,7 @@ public class UserRestControllerIT extends IntegrationTestBase {
                         content().contentType(MediaType.APPLICATION_JSON),
                         jsonPath("$.firstname").value("Test"),
                         jsonPath("$.lastname").value("Test"),
-                        jsonPath("$.email").value("test@gmail.com"),
+                        jsonPath("$.username").value("test@gmail.com"),
                         jsonPath("$.phoneNumber").value("3751234567890"),
                         jsonPath("$.address").value("BY, Gomel, 123 Sovetskaja St"),
                         jsonPath("$.role").value("ADMIN"),
@@ -117,13 +119,15 @@ public class UserRestControllerIT extends IntegrationTestBase {
 
     @Test
     void testDeleteUser() throws Exception {
-        mockMvc.perform(delete("/api/v1/users/{id}", USER_ID))
+        mockMvc.perform(delete("/api/v1/users/{id}", USER_ID)
+                        .with(user("admin@mail.com").authorities(Role.ADMIN)))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     void testDeleteUser_NotFound() throws Exception {
-        mockMvc.perform(delete("/api/v1/users/{id}", INVALID_USER_ID))
+        mockMvc.perform(delete("/api/v1/users/{id}", INVALID_USER_ID)
+                        .with(user("admin@mail.com").authorities(Role.ADMIN)))
                 .andExpect(status().isNotFound());
     }
 

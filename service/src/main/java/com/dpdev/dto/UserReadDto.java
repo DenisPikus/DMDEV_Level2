@@ -10,7 +10,7 @@ public class UserReadDto {
     Long id;
     String firstname;
     String lastname;
-    String email;
+    String username;
     String phoneNumber;
     String address;
     Role role;

@@ -1,40 +1,42 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>User</title>
 </head>
 <body>
-    <form th:action="@{/users/{userId}/update(userId=${user.id})}" enctype="multipart/form-data" method="post" th:object="${user}">
-        <label for="firstname">Firstname:
-            <input id="firstname" type="text" name="firstname" th:value="*{firstname}">
-        </label><br>
-        <label for="lastname">Lastname:
-            <input id="lastname" type="text" name="lastname" th:value="*{lastname}">
-        </label><br>
-        <label for="email">Email:
-            <input id="email" type="text" name="email" th:value="*{email}">
-        </label><br>
-        <label for="phonenumber">Phone number:
-            <input id="phonenumber" type="text" name="phoneNumber" th:value="*{phoneNumber}">
-        </label><br>
-        <label for="address">Address:
-            <input id="address" type="text" name="address" th:value="*{address}">
-        </label><br>
-        <div th:if="${user.image}">
-            <img th:src="@{/api/v1/users/{userId}/avatar(userId=${user.id})}" alt="User image">
-        </div>
-        <label for="image">Image:
-            <input id="image" type="file" name="image">
-        </label><br>
-        <div th:each="role : ${roles}">
-            <input th:id="${role}" type="radio" name="role" th:value="${role}" th:checked="${role == user.role}">
-            <label th:for="${role}" th:text="${role}">Role name</label>
-        </div>
-        <button type="submit">Update</button>
-    </form>
-    <form th:action="@{/users/{userId}/delete(userId=${user.id})}" th:if="${user.role.name() == 'ADMIN'}" method="post">
-        <button type="submit">Remove</button>
-    </form>
+<div th:insert="~{fragment :: header}"></div>
+<form th:action="@{/users/{userId}/update(userId=${user.id})}" enctype="multipart/form-data" method="post"
+      th:object="${user}">
+    <label for="firstname">Firstname:
+        <input id="firstname" type="text" name="firstname" th:value="*{firstname}">
+    </label><br>
+    <label for="lastname">Lastname:
+        <input id="lastname" type="text" name="lastname" th:value="*{lastname}">
+    </label><br>
+    <label for="username">Email:
+        <input id="username" type="text" name="username" th:value="*{username}">
+    </label><br>
+    <label for="phonenumber">Phone number:
+        <input id="phonenumber" type="text" name="phoneNumber" th:value="*{phoneNumber}">
+    </label><br>
+    <label for="address">Address:
+        <input id="address" type="text" name="address" th:value="*{address}">
+    </label><br>
+    <div th:if="${user.image}">
+        <img th:src="@{/api/v1/users/{userId}/avatar(userId=${user.id})}" alt="User image">
+    </div>
+    <label for="image">Image:
+        <input id="image" type="file" name="image">
+    </label><br>
+    <div th:each="role : ${roles}">
+        <input th:id="${role}" type="radio" name="role" th:value="${role}" th:checked="${role == user.role}">
+        <label th:for="${role}" th:text="${role}">Role name</label>
+    </div>
+    <button type="submit">Update</button>
+</form>
+<form th:action="@{/users/{userId}/delete(userId=${user.id})}" sec:authorize="hasAuthority('ADMIN')" method="post">
+    <button type="submit">Remove</button>
+</form>
 </body>
 </html>

@@ -42,7 +42,7 @@ public class User implements BaseEntity<Long> {
     private String lastname;
 
     @Column(nullable = false, unique = true)
-    private String email;
+    private String username;
 
 //    @Column(nullable = false)
     private String password;

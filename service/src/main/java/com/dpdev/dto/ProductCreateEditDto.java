@@ -4,6 +4,7 @@ import com.dpdev.entity.enums.Brand;
 import com.dpdev.entity.enums.ProductType;
 import lombok.Builder;
 import lombok.Value;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 
@@ -16,6 +17,6 @@ public class ProductCreateEditDto {
     String description;
     BigDecimal price;
     Boolean availability;
-    String photoPath;
+    MultipartFile image;
     Long stockId;
 }

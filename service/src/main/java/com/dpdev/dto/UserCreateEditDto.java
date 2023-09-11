@@ -1,13 +1,14 @@
 package com.dpdev.dto;
 
 import com.dpdev.entity.enums.Role;
+import com.dpdev.validation.group.CreateAction;
 import lombok.Builder;
-import lombok.NonNull;
 import lombok.Value;
 import lombok.experimental.FieldNameConstants;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Value
@@ -22,9 +23,10 @@ public class UserCreateEditDto {
     String lastname;
 
     @Email
-    String email;
+    String username;
 
-    String password;
+    @NotBlank(groups = CreateAction.class)
+    String rawPassword;
 
     @Size(max = 13)
     String phoneNumber;
@@ -32,7 +34,6 @@ public class UserCreateEditDto {
     @Size(min = 10, max = 128)
     String address;
 
-    @NonNull
     Role role;
 
     MultipartFile image;

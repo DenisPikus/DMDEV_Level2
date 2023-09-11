@@ -26,7 +26,7 @@ class OrderRepositoryIT extends IntegrationTestBase {
         Orders actualOrder = orderRepository.findOrdersAndUsersById(orderId);
 
         assertThat(actualOrder).isNotNull();
-        assertThat(actualOrder.getUser().getEmail()).isEqualTo("ivan@gmail.com");
+        assertThat(actualOrder.getUser().getUsername()).isEqualTo("ivan@gmail.com");
         assertThat(actualOrder.getOrderItems()).hasSize(3);
         assertThat(actualOrder.getOrderItems().get(0).getProduct().getName()).isEqualTo("Cardiff");
         assertThat(actualOrder.getOrderItems().get(1).getProduct().getName()).isEqualTo("Orbit 80");

@@ -8,5 +8,5 @@ import lombok.Value;
 public class UserFilter {
     String firstname;
     String lastname;
-    String email;
+    String username;
 }

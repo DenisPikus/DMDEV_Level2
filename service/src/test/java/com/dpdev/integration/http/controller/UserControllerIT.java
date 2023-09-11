@@ -3,20 +3,19 @@ package com.dpdev.integration.http.controller;
 import com.dpdev.dto.UserCreateEditDto;
 import com.dpdev.entity.enums.Role;
 import com.dpdev.integration.IntegrationTestBase;
-import com.dpdev.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.dpdev.dto.UserCreateEditDto.Fields.address;
-import static com.dpdev.dto.UserCreateEditDto.Fields.email;
 import static com.dpdev.dto.UserCreateEditDto.Fields.firstname;
 import static com.dpdev.dto.UserCreateEditDto.Fields.lastname;
-import static com.dpdev.dto.UserCreateEditDto.Fields.password;
 import static com.dpdev.dto.UserCreateEditDto.Fields.phoneNumber;
+import static com.dpdev.dto.UserCreateEditDto.Fields.rawPassword;
 import static com.dpdev.dto.UserCreateEditDto.Fields.role;
-import static org.mockito.Mockito.when;
+import static com.dpdev.dto.UserCreateEditDto.Fields.username;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -56,8 +55,7 @@ class UserControllerIT extends IntegrationTestBase {
     @Test
     void findById() throws Exception {
         mockMvc.perform(get("/users/{id}", USER_ID))
-                .andExpectAll(
-                        status().isOk(),
+                .andExpectAll(status().isOk(),
                         model().attributeExists("user"),
                         model().attributeExists("roles"),
                         view().name("user/user")
@@ -67,7 +65,8 @@ class UserControllerIT extends IntegrationTestBase {
     @Test
     public void findByIdWhenUserIsNotPresent() throws Exception {
         mockMvc.perform(get("/users/{id}", INVALID_USER_ID))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound()
+                );
     }
 
     @Test
@@ -75,15 +74,26 @@ class UserControllerIT extends IntegrationTestBase {
         mockMvc.perform(post("/users")
                         .param(firstname, "Test")
                         .param(lastname, "Test")
-                        .param(email, "test@mail.com")
-                        .param(password, "pas")
-                        .param(phoneNumber, "555555")
-                        .param(address, "By, Minsk")
-                        .param(role, "ADMIN")
-                )
+                        .param(username, "test@mail.com")
+                        .param(rawPassword, "pas").param(phoneNumber, "555555555555")
+                        .param(address, "By, Minsk, Pobedy 67/152").param(role, "ADMIN"))
                 .andExpectAll(
                         status().is3xxRedirection(),
-                        redirectedUrlPattern("/users/{\\d+}")
+                        redirectedUrlPattern("/login")
+                );
+    }
+
+    @Test
+    void createThrowException() throws Exception {
+        mockMvc.perform(post("/users")
+                        .param(firstname, "Test")
+                        .param(lastname, "Test")
+                        .param(username, "badEmail")
+                        .param(rawPassword, "pas").param(phoneNumber, "555555")
+                        .param(address, "By, Minsk").param(role, "ADMIN"))
+                .andExpectAll(
+                        status().is3xxRedirection(),
+                        redirectedUrlPattern("/registration")
                 );
     }
 
@@ -92,8 +102,8 @@ class UserControllerIT extends IntegrationTestBase {
         UserCreateEditDto updateUserDto = UserCreateEditDto.builder()
                 .firstname("User1")
                 .lastname("User1")
-                .email("user1@gmail.com")
-                .password("pass")
+                .username("user1@gmail.com")
+                .rawPassword("pass")
                 .phoneNumber("511112116")
                 .address("BY, Minsk, 300 Sovetskaja St")
                 .role(Role.ADMIN)
@@ -109,14 +119,17 @@ class UserControllerIT extends IntegrationTestBase {
 
     @Test
     public void testDeleteUser() throws Exception {
-        mockMvc.perform(post("/users/{id}/delete", USER_ID))
+        mockMvc.perform(post("/users/{id}/delete", USER_ID)
+                        .with(user("admin@mail.com").authorities(Role.ADMIN)))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/users"));
+                .andExpect(redirectedUrl("/users")
+                );
     }
 
     @Test
     public void testDeleteUser_NotFound() throws Exception {
-        mockMvc.perform(post("/users/{id}/delete", INVALID_USER_ID))
+        mockMvc.perform(post("/users/{id}/delete", INVALID_USER_ID)
+                        .with(user("user@mail.com").authorities(Role.ADMIN)))
                 .andExpect(status().isNotFound());
     }
 }
