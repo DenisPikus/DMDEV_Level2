@@ -1,13 +1,14 @@
 package service;
 
 import com.dpdev.dto.UserCreateEditDto;
-import com.dpdev.dto.filter.UserFilter;
 import com.dpdev.dto.UserReadDto;
+import com.dpdev.dto.filter.UserFilter;
 import com.dpdev.entity.User;
 import com.dpdev.entity.enums.Role;
 import com.dpdev.mapper.UserCreateEditMapper;
 import com.dpdev.mapper.UserReadMapper;
 import com.dpdev.repository.UserRepository;
+import com.dpdev.service.ImageService;
 import com.dpdev.service.UserService;
 import com.querydsl.core.types.Predicate;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -44,6 +48,8 @@ class UserServiceTest {
     private UserReadMapper userReadMapper;
     @Mock
     private UserCreateEditMapper userCreateEditMapper;
+    @Mock
+    ImageService imageService;
     @InjectMocks
     private UserService userService;
 
@@ -67,27 +73,30 @@ class UserServiceTest {
                 .address("BY, Minsk, 300 Sovetskaja St")
                 .role(Role.ADMIN)
                 .build();
-        List<User> userList = Arrays.asList(user1, user2);
-        UserFilter filter = UserFilter.builder()
-                .firstname("User1")
-                .build();
-        Pageable pageable = PageRequest.of(0, 10);
-        when(userReadMapper.map(user1)).thenReturn(UserReadDto.builder()
+        UserReadDto user1ReadDto = UserReadDto.builder()
                 .firstname("User1")
                 .lastname("User1")
                 .username("user1@gmail.com")
                 .phoneNumber("511112111")
                 .address("BY, Minsk, 300 Sovetskaja St")
                 .role(Role.USER)
-                .build());
-        when(userReadMapper.map(user2)).thenReturn(UserReadDto.builder()
+                .build();
+        UserReadDto user2ReadDto = UserReadDto.builder()
                 .firstname("User2")
                 .lastname("User2")
                 .username("user2@gmail.com")
                 .phoneNumber("511112115")
                 .address("BY, Minsk, 300 Sovetskaja St")
                 .role(Role.ADMIN)
-                .build());
+                .build();
+
+        List<User> userList = Arrays.asList(user1, user2);
+        UserFilter filter = UserFilter.builder()
+                .firstname("User1")
+                .build();
+        Pageable pageable = PageRequest.of(0, 10);
+        when(userReadMapper.map(user1)).thenReturn(user1ReadDto);
+        when(userReadMapper.map(user2)).thenReturn(user2ReadDto);
         when(userRepository.findAll(any(Predicate.class), eq(pageable)))
                 .thenReturn(new PageImpl<>(userList));
 
@@ -122,7 +131,6 @@ class UserServiceTest {
                 .build();
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(userReadMapper.map(user)).thenReturn(expectedUserReadDto);
-
 
         Optional<UserReadDto> actualResult = userService.findById(userId);
 
@@ -162,8 +170,11 @@ class UserServiceTest {
                 .address("BY, Minsk, 300 Sovetskaja St")
                 .role(Role.USER)
                 .build();
-        when(userCreateEditMapper.map(userCreateEditDto)).thenReturn(user);
-        when(userRepository.save(user)).thenReturn(savedUser);
+
+        doNothing().when(imageService).upload(anyString(), any());
+        doReturn(user).when(userCreateEditMapper).map(userCreateEditDto);
+        doReturn(savedUser).when(userRepository).save(user);
+
         UserReadDto expectedResult = UserReadDto.builder()
                 .id(userId)
                 .firstname("User")
@@ -213,9 +224,11 @@ class UserServiceTest {
                 .address("BY, Minsk, 300 Sovetskaja St")
                 .role(Role.ADMIN)
                 .build();
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(userCreateEditMapper.map(userCreateEditDto, user)).thenReturn(updatedUser);
-        when(userRepository.saveAndFlush(updatedUser)).thenReturn(updatedUser);
+
+        doNothing().when(imageService).upload(anyString(), any());
+        doReturn(Optional.of(user)).when(userRepository).findById(userId);
+        doReturn(updatedUser).when(userCreateEditMapper).map(userCreateEditDto, user);
+        doReturn(updatedUser).when(userRepository).saveAndFlush(updatedUser);
         UserReadDto expectedResult = UserReadDto.builder()
                 .id(userId)
                 .firstname("User1")
@@ -247,7 +260,7 @@ class UserServiceTest {
                 .address("BY, Minsk, 300 Sovetskaja St")
                 .role(Role.USER)
                 .build();
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        doReturn(Optional.of(user)).when(userRepository).findById(userId);
 
         boolean expectedResult = userService.delete(userId);
 
@@ -260,12 +273,27 @@ class UserServiceTest {
     @Test
     void deleteWhenUserIsNotPresent() {
         Long userId = 1L;
-        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+        doReturn(Optional.empty()).when(userRepository).findById(userId);
 
         boolean expectedResult = userService.delete(userId);
 
         assertFalse(expectedResult);
         verify(userRepository).findById(userId);
         verifyNoMoreInteractions(userRepository);
+    }
+
+    @Test
+    void findAvatar() {
+
+    }
+
+    @Test
+    void findByUsername() {
+
+    }
+
+    @Test
+    void loadUserByUsername() {
+
     }
 }

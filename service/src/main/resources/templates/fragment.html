@@ -4,12 +4,24 @@
     <meta charset="UTF-8">
     <title>Fragments</title>
 </head>
-    <body>
-        <div th:fragment="header">
-            <span th:text="${#authentication.principal.username}">Username</span>
-            <form action="/logout" method="post">
-                <button type="submit">Logout</button>
-            </form>
-        <div/>
-    </body>
+<body>
+<div th:fragment="header">
+    <span th:text="${#authentication.principal.username}">Username</span>
+    <form th:action="@{/logout}" method="post">
+        <button type="submit"><span th:text="#{login.logout}">Logout:</span></button>
+    </form>
+    <div th:insert="~{fragment :: locale}"></div>
+</div>
+
+<div th:fragment="locale">
+    <form action="">
+        <select name="lang" onchange="this.form.submit()">
+            <option></option>
+            <option value="en">EN</option>
+            <option value="ru">RU</option>
+        </select>
+    </form>
+</div>
+
+</body>
 </html>

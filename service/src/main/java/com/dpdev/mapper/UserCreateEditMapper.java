@@ -2,6 +2,7 @@ package com.dpdev.mapper;
 
 import com.dpdev.dto.UserCreateEditDto;
 import com.dpdev.entity.User;
+import com.dpdev.entity.enums.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -37,7 +38,10 @@ public class UserCreateEditMapper implements Mapper<UserCreateEditDto, User> {
         user.setUsername(object.getUsername());
         user.setPhoneNumber(object.getPhoneNumber());
         user.setAddress(object.getAddress());
-        user.setRole(object.getRole());
+
+        if (object.getRole() == null) {
+            user.setRole(Role.USER);
+        } else user.setRole(object.getRole());
 
         Optional.ofNullable(object.getRawPassword())
                 .filter(StringUtils::hasText)

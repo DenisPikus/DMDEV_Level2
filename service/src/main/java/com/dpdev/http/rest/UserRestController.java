@@ -4,7 +4,6 @@ import com.dpdev.dto.PageResponse;
 import com.dpdev.dto.UserCreateEditDto;
 import com.dpdev.dto.UserReadDto;
 import com.dpdev.dto.filter.UserFilter;
-import com.dpdev.entity.enums.Role;
 import com.dpdev.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,17 +15,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import static org.springframework.http.ResponseEntity.noContent;
@@ -53,21 +48,7 @@ public class UserRestController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public UserReadDto create(@Validated @ModelAttribute UserCreateEditDto user,
-                              @RequestParam("firstname") String firstname,
-                              @RequestParam("lastname") String lastname,
-                              @RequestParam("phoneNumber") String phoneNumber,
-                              @RequestParam("address") String address,
-                              @RequestParam("role") String role,
-                              @RequestPart("image") MultipartFile image) {
-        UserCreateEditDto.builder()
-                .firstname(firstname)
-                .lastname(lastname)
-                .phoneNumber(phoneNumber)
-                .address(address)
-                .role(Role.valueOf(role))
-                .image(image)
-                .build();
+    public UserReadDto create(@Validated UserCreateEditDto user) {
         return userService.create(user);
     }
 

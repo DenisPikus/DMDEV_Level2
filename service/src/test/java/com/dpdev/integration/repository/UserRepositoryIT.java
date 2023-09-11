@@ -1,4 +1,4 @@
-package com.dpdev.integration.dao;
+package com.dpdev.integration.repository;
 
 import com.dpdev.dto.UserWithAvgPriceProjection;
 import com.dpdev.integration.IntegrationTestBase;

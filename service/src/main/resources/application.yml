@@ -11,10 +11,38 @@ spring:
     hibernate:
       ddl-auto: validate
     open-in-view: false
-  thymeleaf:
-    extras:
-      springsecurity5:
-        enabled=true:logging:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 77698982717-ojqqv1c7fggk1j1iqdkc2hmiglqhrks2.apps.googleusercontent.com
+            clientSecret: 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
+            redirectUri: https://localhost:8080/login/oauth2/code/google
+            scope:
+              - openid
+              - email
+              - profile
+
+  messages:
+    basename: messages
+
+springdoc:
+  swagger-ui:
+    oauth:
+      client-id: 77698982717-ojqqv1c7fggk1j1iqdkc2hmiglqhrks2.apps.googleusercontent.com
+      client-secret: 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e
+      scopes:
+        - openid
+        - email
+        - profile
+    oauth2-redirect-url: https://localhost:8080/swagger-ui/oauth2-redirect.html
+
+oauth2:
+  authorizationUrl: https://localhost:8080/oauth2/authorization/google
+  tokenUrl: https://www.googleapis.com/oauth2/v4/token
+
+logging:
   pattern:
       console: "%d %-5level %logger : %msg%n"
       file: "%d %-5level [%thread] %logger : %msg%n"
@@ -24,5 +52,5 @@ spring:
 
 app:
   image:
-    bucket: "/Users/Denis/maven-homework/images"
+    bucket: "/Users/Denis/maven-homework/images/"
 
