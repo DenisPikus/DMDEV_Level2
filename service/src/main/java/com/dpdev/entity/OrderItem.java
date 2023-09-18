@@ -1,5 +1,6 @@
 package com.dpdev.entity;
 
+import com.dpdev.exception.OrderItemException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -41,7 +42,16 @@ public class OrderItem implements BaseEntity<Long> {
     private BigDecimal price;
 
     public void setOrders(Orders order) {
-        this.order = order;
-        this.order.getOrderItems().add(this);
+        if (!validateOrderItem()) {
+            throw new OrderItemException("Order item validation failed.");
+        } else {
+            this.order = order;
+            this.order.getOrderItems().add(this);
+        }
+    }
+
+    private boolean validateOrderItem() {
+        return product.getQuantity() != 0
+                && product.getQuantity() - this.quantity >= 0;
     }
 }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Product</title>
+</head>
+<body>
+<div th:insert="~{fragment :: header}"></div>
+<form th:action="@{/products/{productId}/update(productId=${product.id})}" enctype="multipart/form-data" method="post"
+      th:object="${product}">
+    <label for="name">Name:
+        <input id="name" type="text" name="name" th:value="*{name}">
+    </label><br>
+    <select name="brand">
+        <option th:each="brand : ${brand}" th:value="${brand}" th:text="${brand}" th:selected="${brand == product.brand}"></option>
+    </select><br>
+    <select name="productType">
+        <option th:each="productType : ${productType}" th:value="${productType}" th:text="${productType}" th:selected="${productType == product.productType}"></option>
+    </select><br>
+    <label for="description">Description:
+        <input id="description" type="text" name="description" th:value="*{description}">
+    </label><br>
+    <label for="price">Price:
+        <input id="price" type="number" name="price" th:value="*{price}">
+    </label><br>
+    <label for="quantity">Quantity:
+        <input id="quantity" type="number" name="quantity" th:value="*{quantity}">
+    </label><br>
+    <label for="availability">Availability:
+        <input id="availability" type="text" name="availability" th:value="*{availability}">
+    </label><br>
+    <div th:if="${product.image}">
+        <img th:src="@{/api/v1/products/{productId}/image(productId=${product.id})}" alt="Product image">
+    </div>
+    <label for="image">Image:
+        <input id="image" type="file" name="image">
+    </label><br>
+    <button type="submit">Update</button>
+</form>
+<form th:action="@{/products/{productId}/delete(productId=${product.id})}"
+      th:if="${#authentication.authorities[0].getAuthority().equals('ADMIN')}" method="post">
+    <button type="submit">Remove</button>
+</form>
+</body>
+</html>

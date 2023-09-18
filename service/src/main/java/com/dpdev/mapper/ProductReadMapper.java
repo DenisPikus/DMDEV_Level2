@@ -16,9 +16,9 @@ public class ProductReadMapper implements Mapper<Product, ProductReadDto> {
                 .productType(object.getProductType())
                 .description(object.getDescription())
                 .price(object.getPrice())
-                .availability(object.getAvailability())
-                .photoPath(object.getPhotoPath())
-                .stockId(object.getStock().getId())
+                .quantity(object.getQuantity())
+                .availability(object.isAvailability())
+                .image(object.getImage())
                 .build();
     }
 }

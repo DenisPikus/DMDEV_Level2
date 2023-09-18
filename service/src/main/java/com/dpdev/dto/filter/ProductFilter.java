@@ -6,12 +6,19 @@ import lombok.Builder;
 import lombok.Value;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Value
 @Builder
 public class ProductFilter {
-    Brand brand;
-    ProductType productType;
+
+    @Builder.Default
+    List<Brand> brands = new ArrayList<>();
+
+    @Builder.Default
+    List<ProductType> productTypes = new ArrayList<>();
+
     BigDecimal price;
     BigDecimal minPrice;
     BigDecimal maxPrice;

@@ -16,7 +16,8 @@ public class ProductReadDto {
     ProductType productType;
     String description;
     BigDecimal price;
+    Integer quantity;
     Boolean availability;
-    String photoPath;
-    Long stockId;
+    String image;
+    //StockReadDto stockDto;
 }
