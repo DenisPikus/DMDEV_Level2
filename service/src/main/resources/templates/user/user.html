@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>User</title>
@@ -8,35 +8,36 @@
 <div th:insert="~{fragment :: header}"></div>
 <form th:action="@{/users/{userId}/update(userId=${user.id})}" enctype="multipart/form-data" method="post"
       th:object="${user}">
-    <label for="firstname">Firstname:
+    <label for="firstname"><span th:text="#{user.firstname}">Firstname:</span>
         <input id="firstname" type="text" name="firstname" th:value="*{firstname}">
     </label><br>
-    <label for="lastname">Lastname:
+    <label for="lastname"><span th:text="#{user.lastname}">Lastname:</span>
         <input id="lastname" type="text" name="lastname" th:value="*{lastname}">
     </label><br>
-    <label for="username">Email:
+    <label for="username"><span th:text="#{user.email}">Email:</span>
         <input id="username" type="text" name="username" th:value="*{username}">
     </label><br>
-    <label for="phonenumber">Phone number:
+    <label for="phonenumber"><span th:text="#{user.phoneNumber}">Phone number:</span>
         <input id="phonenumber" type="text" name="phoneNumber" th:value="*{phoneNumber}">
     </label><br>
-    <label for="address">Address:
+    <label for="address"><span th:text="#{user.address}">Address:</span>
         <input id="address" type="text" name="address" th:value="*{address}">
     </label><br>
     <div th:if="${user.image}">
         <img th:src="@{/api/v1/users/{userId}/avatar(userId=${user.id})}" alt="User image">
     </div>
-    <label for="image">Image:
+    <label for="image"><span th:text="#{user.image}">Image:</span>
         <input id="image" type="file" name="image">
     </label><br>
     <div th:each="role : ${roles}">
         <input th:id="${role}" type="radio" name="role" th:value="${role}" th:checked="${role == user.role}">
-        <label th:for="${role}" th:text="${role}">Role name</label>
+        <label th:for="${role}" th:text="${role}"><span th:text="#{user.role}">Role name</span></label>
     </div>
-    <button type="submit">Update</button>
+    <button type="submit"><span th:text="#{base.update}">Update</span></button>
 </form>
-<form th:action="@{/users/{userId}/delete(userId=${user.id})}" sec:authorize="hasAuthority('ADMIN')" method="post">
-    <button type="submit">Remove</button>
+<form th:action="@{/users/{userId}/delete(userId=${user.id})}"
+      th:if="${#authentication.authorities[0].getAuthority().equals('ADMIN')}" method="post">
+    <button type="submit"><span th:text="#{base.remove}">Remove</span></button>
 </form>
 </body>
 </html>

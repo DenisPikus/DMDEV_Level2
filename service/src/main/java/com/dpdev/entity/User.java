@@ -1,5 +1,6 @@
 package com.dpdev.entity;
 
+import com.dpdev.entity.enums.OrderStatus;
 import com.dpdev.entity.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +19,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +46,7 @@ public class User implements BaseEntity<Long> {
     @Column(nullable = false, unique = true)
     private String username;
 
-//    @Column(nullable = false)
+    //    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false, unique = true)
@@ -63,8 +65,14 @@ public class User implements BaseEntity<Long> {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Orders> orders = new ArrayList<>();
 
-    public void addOrder(Orders orders) {
-        this.orders.add(orders);
-        orders.setUser(this);
+    public void addOrder(OrderItem orderItem) {
+        Orders order = Orders.builder()
+                .orderStatus(OrderStatus.PENDING)
+                .creationDate(Instant.now())
+                .user(this)
+                .build();
+
+        order.addOrderItem(orderItem);
+        orders.add(order);
     }
 }

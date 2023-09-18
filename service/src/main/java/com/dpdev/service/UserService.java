@@ -9,9 +9,9 @@ import com.dpdev.mapper.UserReadMapper;
 import com.dpdev.repository.QPredicate;
 import com.dpdev.repository.UserRepository;
 import com.querydsl.core.types.Predicate;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -31,6 +33,10 @@ import static com.dpdev.entity.QUser.user;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
+    private static String IMAGE_DEFAULT = "C:/Users/Denis/maven-homework/images/no-image-available.png";
+
+    @Value("${app.image.bucket}")
+    private final String bucket;
 
     private final UserRepository userRepository;
     private final UserReadMapper userReadMapper;
@@ -94,11 +100,9 @@ public class UserService implements UserDetailsService {
                 .flatMap(imageService::get);
     }
 
-    @SneakyThrows
-    private void uploadImage(MultipartFile image) {
-        if (!image.isEmpty()) {
-            imageService.upload(image.getOriginalFilename(), image.getInputStream());
-        }
+    public Optional<UserReadDto> findByUsername(String username) {
+        return userRepository.findUserByUsername(username)
+                .map(userReadMapper::map);
     }
 
     @Override
@@ -110,5 +114,14 @@ public class UserService implements UserDetailsService {
                         Collections.singleton(user.getRole())
                 ))
                 .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + username));
+    }
+
+    @SneakyThrows
+    private void uploadImage(MultipartFile image) {
+        if (image != null && !image.isEmpty()) {
+            imageService.upload(image.getOriginalFilename(), image.getInputStream());
+        } else {
+            imageService.upload(IMAGE_DEFAULT, Files.newInputStream(Path.of(IMAGE_DEFAULT)));
+        }
     }
 }

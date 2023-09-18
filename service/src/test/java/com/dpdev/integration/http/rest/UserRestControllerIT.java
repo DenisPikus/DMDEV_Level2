@@ -71,15 +71,13 @@ public class UserRestControllerIT extends IntegrationTestBase {
                 new MockMultipartFile("image", "avatar_1.png", MediaType.MULTIPART_FORM_DATA_VALUE, imageBytes);
 
         ResultActions request = mockMvc.perform(multipart("/api/v1/users")
-                        .file(multipartFile)
-                        .content(getExpectedJsonContentFromFile("/json/new-user.json"))
-//                .param("firstname", "Test")
-//                .param("lastname", "Test")
-//                .param("username", "test@gmail.com")
-//                .param("phoneNumber", "3751234567822")
-//                .param("address", "BY, Gomel, 123 Sovetskaja St")
-//                .param("role", "ADMIN")
-//                .param("image", "avatar_1.png")
+                .file(multipartFile)
+                .param("firstname", "Test")
+                .param("lastname", "Test")
+                .param("username", "test@gmail.com")
+                .param("phoneNumber", "3751234567822")
+                .param("address", "BY, Gomel, 123 Sovetskaja St")
+                .param("role", "ADMIN")
         );
         request
                 .andExpect(status().isCreated())
@@ -89,7 +87,7 @@ public class UserRestControllerIT extends IntegrationTestBase {
                 .andExpect(jsonPath("$.username").value("test@gmail.com"))
                 .andExpect(jsonPath("$.phoneNumber").value("3751234567822"))
                 .andExpect(jsonPath("$.address").value("BY, Gomel, 123 Sovetskaja St"))
-                .andExpect(jsonPath("$.role").value("USER"))
+                .andExpect(jsonPath("$.role").value("ADMIN"))
                 .andExpect(jsonPath("$.image").value("avatar_1.png"));
     }
 

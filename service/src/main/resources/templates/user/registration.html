@@ -6,32 +6,28 @@
 </head>
 <body>
     <form th:action="@{/users}" enctype="multipart/form-data" method="post" th:object="${user}">
-        <label for="firstname">Firstname:
+        <label for="firstname"><span th:text="#{user.firstname}">Firstname:</span>
             <input id="firstname" type="text" name="firstname" th:value="*{firstname}">
         </label><br>
-        <label for="lastname">Lastname:
+        <label for="lastname"><span th:text="#{user.lastname}">Lastname:</span>
             <input id="lastname" type="lastname" name="lastname" th:value="*{lastname}">
         </label><br>
-        <label for="username">Email:
+        <label for="username"><span th:text="#{user.email}">Email:</span>
             <input id="username" type="text" name="username" th:value="*{username}">
         </label><br>
-        <label for="rawPassword">Password:
+        <label for="rawPassword"><span th:text="#{user.password}">Password:</span>
             <input id="rawPassword" type="password" name="rawPassword">
         </label><br>
-        <label for="phonenumber">Phone number:
+        <label for="phonenumber"><span th:text="#{user.phoneNumber}">Phone number:</span>
             <input id="phonenumber" type="text" name="phoneNumber" th:value="*{phoneNumber}">
         </label><br>
-        <label for="address">Address:
+        <label for="address"><span th:text="#{user.address}">Address:</span>
             <input id="address" type="text" name="address" th:value="*{address}">
         </label><br>
-        <label for="image">Image:
+        <label for="image"><span th:text="#{user.image}">Image:</span>
             <input id="image" type="file" name="image">
         </label><br>
-        <div th:each="role : ${roles}">
-            <input th:id="${role}" type="radio" name="role" th:value="${role}" th:checked="${role == user.role}">
-            <label th:for="${role}" th:text="${role}">Role name</label>
-        </div>
-        <button type="submit">Register</button>
+        <button type="submit"><span th:text="#{base.register}">Register:</span></button>
     </form>
     <div th:if="${errors}">
         <p style="color: red" th:each="error : ${errors}" th:text="${error.defaultMessage}">Error message</p>

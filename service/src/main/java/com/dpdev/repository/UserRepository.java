@@ -5,7 +5,6 @@ import com.dpdev.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,5 +19,4 @@ public interface UserRepository extends JpaRepository<User, Long>, FilterUserRep
     List<UserWithAvgPriceProjection> findUsersWithAvgOrdersOrderedByEmail();
 
     Optional<User> findUserByUsername(String username);
-
 }

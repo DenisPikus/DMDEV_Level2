@@ -9,16 +9,12 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import java.math.BigDecimal;
 
 @Data
@@ -34,14 +30,11 @@ public class Product implements BaseEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Brand brand;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ProductType productType;
 
@@ -49,16 +42,13 @@ public class Product implements BaseEntity<Long> {
 
     private BigDecimal price;
 
-    @Column(nullable = false)
-    private Boolean availability;
+    private Integer quantity;
+
+    private boolean availability;
 
     private String image;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Stock stock;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private Stock stock;
 
-    public void setStock(Stock stock) {
-        this.stock = stock;
-        stock.setProduct(this);
-    }
 }
