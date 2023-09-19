@@ -1,10 +1,10 @@
 package com.dpdev.http.rest;
 
 import com.dpdev.dto.PageResponse;
-import com.dpdev.dto.UserCreateEditDto;
-import com.dpdev.dto.UserReadDto;
-import com.dpdev.dto.filter.UserFilter;
-import com.dpdev.service.UserService;
+import com.dpdev.dto.ProductCreateEditDto;
+import com.dpdev.dto.ProductReadDto;
+import com.dpdev.dto.filter.ProductFilter;
+import com.dpdev.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,47 +28,47 @@ import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.notFound;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
-public class UserRestController {
+public class ProductRestController {
 
-    private final UserService userService;
+    private final ProductService productService;
 
     @GetMapping
-    public PageResponse<UserReadDto> findAll(UserFilter filter, Pageable pageable) {
-        Page<UserReadDto> page = userService.findAll(filter, pageable);
+    public PageResponse<ProductReadDto> findAll(ProductFilter filter, Pageable pageable) {
+        Page<ProductReadDto> page = productService.findAll(filter, pageable);
         return PageResponse.of(page);
     }
 
     @GetMapping(value = "/{id}")
-    public UserReadDto findById(@PathVariable Long id) {
-        return userService.findById(id)
+    public ProductReadDto findById(@PathVariable Long id) {
+        return productService.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public UserReadDto create(@Validated UserCreateEditDto user) {
-        return userService.create(user);
+    public ProductReadDto create(@Validated ProductCreateEditDto productCreateEditDto) {
+        return productService.create(productCreateEditDto);
     }
 
     @PutMapping("/{id}")
-    public UserReadDto update(@PathVariable Long id, @Validated @RequestBody UserCreateEditDto user) {
-        return userService.update(id, user)
+    public ProductReadDto update(@PathVariable Long id, @Validated @RequestBody ProductCreateEditDto productDto) {
+        return productService.update(id, productDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<?> delete(@PathVariable Long id) {
-        return userService.delete(id)
+        return productService.delete(id)
                 ? noContent().build()
                 : notFound().build();
     }
 
-    @GetMapping("/{id}/avatar")
-    public ResponseEntity<byte[]> findAvatar(@PathVariable("id") Long id) {
-        return userService.findAvatar(id)
+    @GetMapping("/{id}/image")
+    public ResponseEntity<byte[]> findImage(@PathVariable("id") Long id) {
+        return productService.findImage(id)
                 .map(content -> ResponseEntity.ok()
                         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE)
                         .contentLength(content.length)

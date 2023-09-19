@@ -48,7 +48,7 @@ public class Product implements BaseEntity<Long> {
 
     private String image;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private Stock stock;
-
+    private boolean setAvailability() {
+        return quantity > 0;
+    }
 }

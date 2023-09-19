@@ -1,15 +1,18 @@
 package com.dpdev.http.controller;
 
 import com.dpdev.dto.PageResponse;
-import com.dpdev.dto.UserCreateEditDto;
-import com.dpdev.dto.UserReadDto;
-import com.dpdev.dto.filter.UserFilter;
+import com.dpdev.dto.ProductCreateEditDto;
+import com.dpdev.dto.ProductReadDto;
+import com.dpdev.dto.filter.ProductFilter;
+import com.dpdev.entity.enums.Brand;
+import com.dpdev.entity.enums.ProductType;
 import com.dpdev.entity.enums.Role;
-import com.dpdev.service.UserService;
+import com.dpdev.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,63 +26,59 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/products")
 @RequiredArgsConstructor
-public class UserController {
+public class ProductController {
 
-    private final UserService userService;
-
-    @GetMapping("/registration")
-    public String registration(Model model, @ModelAttribute("user") UserCreateEditDto user) {
-        model.addAttribute("user", user);
-        model.addAttribute("roles", Role.values());
-        return "user/registration";
-    }
+    private final ProductService productService;
 
     @GetMapping
-    public String findAll(Model model, UserFilter filter, Pageable pageable) {
-        Page<UserReadDto> page = userService.findAll(filter, pageable);
-        model.addAttribute("users", PageResponse.of(page));
+    public String findAll(Model model, ProductFilter filter, Pageable pageable) {
+        Page<ProductReadDto> page = productService.findAll(filter, pageable);
+        model.addAttribute("products", PageResponse.of(page));
         model.addAttribute("filter", filter);
-        return "user/users";
+        return "product/products";
     }
 
     @GetMapping("/{id}")
     public String findById(@PathVariable Long id, Model model) {
-        return userService.findById(id)
-                .map(user -> {
-                    model.addAttribute("user", user);
-                    model.addAttribute("roles", Role.values());
-                    return "user/user";
+        return productService.findById(id)
+                .map(product -> {
+                    model.addAttribute("product", product);
+                    model.addAttribute("brand", Brand.values());
+                    model.addAttribute("productType", ProductType.values());
+                    if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(Role.ADMIN)) {
+                        return "product/product";
+                    }
+                    return "product/view-product";
                 })
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
-    public String create(@ModelAttribute("user") @Validated UserCreateEditDto user,
+    public String create(@ModelAttribute("product") @Validated ProductCreateEditDto product,
                          BindingResult bindingResult,
                          RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("user", user);
+            redirectAttributes.addFlashAttribute("product", product);
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-            return "redirect:/users/registration";
+            return "redirect:/products";
         }
-        userService.create(user);
-        return "redirect:/login";
+        return "redirect:/products/" + productService.create(product).getId();
     }
 
     @PostMapping("/{id}/update")
-    public String update(@PathVariable Long id, @ModelAttribute("user") UserCreateEditDto user) {
-        return userService.update(id, user)
-                .map(it -> "redirect:/users/{id}")
+    public String update(@PathVariable Long id, @ModelAttribute("product") ProductCreateEditDto product) {
+        return productService.update(id, product)
+                .map(it -> "redirect:/products/{id}")
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Long id) {
-        if (!userService.delete(id)) {
+        if (!productService.delete(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        return "redirect:/users";
+        return "redirect:/products";
     }
 }

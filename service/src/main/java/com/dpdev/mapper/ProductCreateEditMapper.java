@@ -2,18 +2,15 @@ package com.dpdev.mapper;
 
 import com.dpdev.dto.ProductCreateEditDto;
 import com.dpdev.entity.Product;
-import com.dpdev.entity.Stock;
-import com.dpdev.repository.StockRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
-@Component
-@RequiredArgsConstructor
-public class ProductCreateEditMapper implements Mapper<ProductCreateEditDto, Product> {
+import static java.util.function.Predicate.not;
 
-    private final StockRepository stockRepository;
+@Component
+public class ProductCreateEditMapper implements Mapper<ProductCreateEditDto, Product> {
 
     @Override
     public Product map(ProductCreateEditDto object) {
@@ -34,14 +31,10 @@ public class ProductCreateEditMapper implements Mapper<ProductCreateEditDto, Pro
         product.setProductType(object.getProductType());
         product.setDescription(object.getDescription());
         product.setPrice(object.getPrice());
-        product.setAvailability(object.getAvailability());
-        product.setPhotoPath(object.getPhotoPath());
-        product.setStock(getStock(object.getStockId()));
-    }
+        product.setAvailability(object.isAvailability());
 
-    public Stock getStock(Long stockId) {
-        return Optional.ofNullable(stockId)
-                .flatMap(stockRepository::findById)
-                .orElse(null);
+        Optional.ofNullable(object.getImage())
+                .filter(not(MultipartFile::isEmpty))
+                .ifPresent(image -> product.setImage(image.getOriginalFilename()));
     }
 }
